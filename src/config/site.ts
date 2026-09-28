@@ -84,6 +84,7 @@ export const siteConfig = {
     'En cumplimiento de la Ley N° 31207 y la Resolución de Consejo Directivo N° 00138-2021-CD/OSIPTEL, Digo Telecom garantiza el 70% de la velocidad contratada (mínimo garantizado) tanto en subida como en bajada.',
   // `#ancla` = sección de la página del segmento; `/ruta` = vista aparte.
   navHogar: [
+    { href: '#inicio', label: 'Inicio' },
     { href: '#planes', label: 'Planes' },
     { href: '#servicios', label: 'Servicios' },
     { href: '/cobertura', label: 'Cobertura' },
@@ -92,6 +93,7 @@ export const siteConfig = {
     { href: '#contacto', label: 'Contacto' },
   ] satisfies NavLink[],
   navEmpresas: [
+    { href: '#empresas-inicio', label: 'Inicio' },
     { href: '#beneficios-empresas', label: 'Beneficios' },
     { href: '#servicios-empresas', label: 'Servicios' },
     { href: '#proceso-empresas', label: 'Proceso' },

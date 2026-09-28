@@ -147,12 +147,24 @@ export function HeroAdBoard() {
         )}
       </div>
 
-      <div className="hero-ad-bar">
-        <div key={ad.id} className="hero-ad-copy" aria-live={running ? 'off' : 'polite'}>
-          <p className="hero-ad-title">{ad.title}</p>
-          <p className="hero-ad-detail">{ad.detail}</p>
-        </div>
-        <AdCta ad={ad} />
+      {/* Todas las franjas de texto ocupan la misma celda: el cartel mide siempre lo que la más
+          alta y no cambia de tamaño al rotar. Solo la activa se ve y es interactiva. */}
+      <div className="hero-ad-bars" aria-live={running ? 'off' : 'polite'}>
+        {heroAds.map((item, i) => (
+          <div
+            key={item.id}
+            className="hero-ad-bar"
+            data-active={i === index}
+            aria-hidden={i !== index}
+            inert={i !== index}
+          >
+            <div className="hero-ad-copy">
+              <p className="hero-ad-title">{item.title}</p>
+              <p className="hero-ad-detail">{item.detail}</p>
+            </div>
+            <AdCta ad={item} />
+          </div>
+        ))}
       </div>
 
       {heroAds.length > 1 && (

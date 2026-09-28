@@ -461,16 +461,29 @@ body.mobile-nav-open .site-mobile-drawer {
   height: 1.1rem;
 }
 
+.hero-ad-bars {
+  display: grid;
+}
+
 .hero-ad-bar {
+  grid-area: 1 / 1;
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 0.85rem 0.4rem 0.35rem;
+  visibility: hidden;
+}
+
+.hero-ad-bar[data-active='true'] {
+  visibility: visible;
 }
 
 .hero-ad-copy {
   flex: 1;
   min-width: 0;
+}
+
+.hero-ad-bar[data-active='true'] .hero-ad-copy {
   animation: hero-ad-copy-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -608,7 +621,7 @@ body.mobile-nav-open .site-mobile-drawer {
     scale: 1;
   }
 
-  .hero-ad-copy {
+  .hero-ad-bar[data-active='true'] .hero-ad-copy {
     animation: none;
   }
 }
