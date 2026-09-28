@@ -1,4 +1,104 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "routes": [
+    {
+      "src": "/(.*)",
+      "headers": {
+        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+      },
+      "continue": true
+    },
+    {
+      "src": "/index\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/"
+      }
+    },
+    {
+      "src": "/digo-empresas/?",
+      "status": 301,
+      "headers": {
+        "Location": "/empresas"
+      }
+    },
+    {
+      "src": "/libro-reclamaciones/?",
+      "status": 301,
+      "headers": {
+        "Location": "/libro-de-reclamaciones"
+      }
+    },
+    {
+      "src": "/faq/?",
+      "status": 301,
+      "headers": {
+        "Location": "/preguntas-frecuentes"
+      }
+    },
+    {
+      "src": "/contact-us/?",
+      "status": 301,
+      "headers": {
+        "Location": "/#contacto"
+      }
+    },
+    {
+      "src": "/pricing/?",
+      "status": 301,
+      "headers": {
+        "Location": "/#planes"
+      }
+    },
+    {
+      "src": "/.+-k\\.html",
+      "status": 410,
+      "dest": "/404.html"
+    },
+    {
+      "src": "/(wp-admin|wp-content|wp-includes|wp-json|wp-login\\.php|xmlrpc\\.php|feed|comments|about-us|blog|service|team|features|404-2)(/.*)?",
+      "status": 410,
+      "dest": "/404.html"
+    },
+    {
+      "src": "/(client|claim|auth|identify|ap)(/.*)?",
+      "status": 410,
+      "dest": "/404.html"
+    },
+    {
+      "src": "/(.+)/index\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/$1"
+      }
+    },
+    {
+      "src": "/(.+)/",
+      "status": 308,
+      "headers": {
+        "Location": "/$1"
+      }
+    },
+    {
+      "src": "/404\\.html",
+      "status": 404,
+      "dest": "/404.html"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(empresas|cobertura|medios-de-pago|preguntas-frecuentes|libro-de-reclamaciones|terminos-y-condiciones)",
+      "dest": "/$1/index.html"
+    },
+    {
+      "src": "/.*",
+      "status": 404,
+      "dest": "/404.html"
+    }
+  ]
 }

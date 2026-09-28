@@ -94,7 +94,7 @@ export function PaymentsPage() {
   const [slabsRef, live] = useOnScreen<HTMLDivElement>()
 
   return (
-    <PageShell segment="hogar" title="Medios de pago — Digo Telecom">
+    <PageShell segment="hogar">
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Medios de pago">
           <p>Paga tu servicio mensual por transferencia o depósito en BCP, o con Yape.</p>

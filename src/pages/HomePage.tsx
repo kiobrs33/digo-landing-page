@@ -9,7 +9,7 @@ import { PageShell } from '@/components/layout/PageShell'
 
 export function HomePage() {
   return (
-    <PageShell segment="hogar" title="Digo Telecom — Fibra óptica en Arequipa">
+    <PageShell segment="hogar">
       <main id="contenido" tabIndex={-1}>
         <HeroSection />
         <PlansSection />

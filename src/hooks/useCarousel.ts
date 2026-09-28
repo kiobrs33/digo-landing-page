@@ -14,13 +14,17 @@ function resolveVisible(rules: readonly VisibleRule[], fallback: number) {
   return rules.find(([query]) => window.matchMedia(query).matches)?.[1] ?? fallback
 }
 
-/** Cantidad de diapositivas visibles según el ancho. `rules` debe ser una constante de módulo. */
+/**
+ * Cantidad de diapositivas visibles según el ancho. `rules` debe ser una constante de módulo.
+ * Empieza en `fallback` (igual que el HTML pre-renderizado) y se ajusta al montar.
+ */
 export function useVisibleCount(rules: readonly VisibleRule[], fallback: number) {
-  const [visible, setVisible] = useState(() => resolveVisible(rules, fallback))
+  const [visible, setVisible] = useState(fallback)
 
   useEffect(() => {
     const lists = rules.map(([query]) => window.matchMedia(query))
     const update = () => setVisible(resolveVisible(rules, fallback))
+    update()
     lists.forEach((list) => list.addEventListener('change', update))
     return () => lists.forEach((list) => list.removeEventListener('change', update))
   }, [rules, fallback])

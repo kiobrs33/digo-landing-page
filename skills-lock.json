@@ -48,6 +48,12 @@
       "sourceType": "github",
       "skillPath": "skills/playwright-cli/SKILL.md",
       "computedHash": "1e6cef0264b72fbf47618ccb82644b9a72934b2eeb35186842332928492a3cd2"
+    },
+    "seo-technical": {
+      "source": "agricidaniel/claude-seo",
+      "sourceType": "github",
+      "skillPath": "skills/seo-technical/SKILL.md",
+      "computedHash": "6b12555a24df149c6649ae4155adce82c5498a4d9c8d79ca65f2946be5cff9db"
     }
   }
 }

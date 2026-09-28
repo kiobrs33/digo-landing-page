@@ -17,7 +17,7 @@ function AdCta({ ad }: { ad: HeroAd }) {
   const { cta } = ad
   if (cta.kind === 'link') {
     return (
-      <Link viewTransition to={cta.href} className="btn btn-primary hero-ad-cta">
+      <Link viewTransition to={cta.href} className="btn btn-primary hero-showcase-cta">
         {cta.label}
       </Link>
     )
@@ -27,7 +27,7 @@ function AdCta({ ad }: { ad: HeroAd }) {
       href={getWhatsAppHref('hogar', siteConfig.whatsappMessages.plan(cta.planName))}
       target="_blank"
       rel="noopener noreferrer"
-      className="btn btn-primary hero-ad-cta"
+      className="btn btn-primary hero-showcase-cta"
     >
       <WhatsAppIcon />
       {cta.label}
@@ -45,14 +45,14 @@ export function HeroAdBoard() {
   const [paused, setPaused] = useState(false)
   const [holding, setHolding] = useState(false)
   const [inView, setInView] = useState(true)
-  const [reducedMotion, setReducedMotion] = useState(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  )
+  // Falso al renderizar (igual que el HTML pre-renderizado); se lee la preferencia al montar.
+  const [reducedMotion, setReducedMotion] = useState(false)
   const rootRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
     const update = () => setReducedMotion(query.matches)
+    update()
     query.addEventListener('change', update)
     return () => query.removeEventListener('change', update)
   }, [])
@@ -79,9 +79,9 @@ export function HeroAdBoard() {
   return (
     <section
       ref={rootRef}
-      className="hero-ad"
+      className="hero-showcase"
       aria-roledescription="carrusel"
-      aria-label="Anuncios Digo"
+      aria-label="Novedades de Digo"
       data-running={running}
       style={{ '--ad-duration': `${AUTOPLAY_MS}ms` } as CSSProperties}
       onMouseEnter={() => setHolding(true)}
@@ -92,19 +92,21 @@ export function HeroAdBoard() {
       }}
       {...carousel.handlers}
     >
-      <div className="hero-ad-screen">
+      <div className="hero-showcase-screen">
         {heroAds.map((item, i) => (
           <div
             key={item.id}
-            className="hero-ad-slide"
+            className="hero-showcase-slide"
             data-active={i === index}
             aria-hidden={i !== index}
           >
             <img
-              className="hero-ad-backdrop"
-              src={item.image.src}
+              className="hero-showcase-backdrop"
+              // Fondo desenfocado: basta la versión webp pequeña. La primera pieza es la imagen
+              // más grande del primer pantallazo (LCP), así que carga sin esperar.
+              src={item.image.src.replace(/\.jpg$/, '-640.webp')}
               alt=""
-              loading="lazy"
+              loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
             />
             <picture>
@@ -129,16 +131,16 @@ export function HeroAdBoard() {
           <>
             <button
               type="button"
-              className="hero-ad-arrow hero-ad-arrow--prev"
-              aria-label="Anuncio anterior"
+              className="hero-showcase-arrow hero-showcase-arrow--prev"
+              aria-label="Novedad anterior"
               onClick={goPrev}
             >
               <ChevronIcon direction="left" />
             </button>
             <button
               type="button"
-              className="hero-ad-arrow hero-ad-arrow--next"
-              aria-label="Anuncio siguiente"
+              className="hero-showcase-arrow hero-showcase-arrow--next"
+              aria-label="Novedad siguiente"
               onClick={goNext}
             >
               <ChevronIcon direction="right" />
@@ -149,18 +151,18 @@ export function HeroAdBoard() {
 
       {/* Todas las franjas de texto ocupan la misma celda: el cartel mide siempre lo que la más
           alta y no cambia de tamaño al rotar. Solo la activa se ve y es interactiva. */}
-      <div className="hero-ad-bars" aria-live={running ? 'off' : 'polite'}>
+      <div className="hero-showcase-bars" aria-live={running ? 'off' : 'polite'}>
         {heroAds.map((item, i) => (
           <div
             key={item.id}
-            className="hero-ad-bar"
+            className="hero-showcase-bar"
             data-active={i === index}
             aria-hidden={i !== index}
             inert={i !== index}
           >
-            <div className="hero-ad-copy">
-              <p className="hero-ad-title">{item.title}</p>
-              <p className="hero-ad-detail">{item.detail}</p>
+            <div className="hero-showcase-copy">
+              <p className="hero-showcase-title">{item.title}</p>
+              <p className="hero-showcase-detail">{item.detail}</p>
             </div>
             <AdCta ad={item} />
           </div>
@@ -168,15 +170,15 @@ export function HeroAdBoard() {
       </div>
 
       {heroAds.length > 1 && (
-        <div className="hero-ad-controls">
-          <div className="hero-ad-tabs">
+        <div className="hero-showcase-controls">
+          <div className="hero-showcase-tabs">
             {heroAds.map((item, i) => (
               <button
                 key={item.id}
                 type="button"
-                className="hero-ad-tab"
+                className="hero-showcase-tab"
                 aria-current={i === index}
-                aria-label={`Anuncio ${i + 1} de ${heroAds.length}: ${item.title}`}
+                aria-label={`Novedad ${i + 1} de ${heroAds.length}: ${item.title}`}
                 onClick={() => goTo(i)}
               >
                 <span key={i === index ? `on-${index}` : 'off'} />
@@ -185,8 +187,8 @@ export function HeroAdBoard() {
           </div>
           <button
             type="button"
-            className="hero-ad-toggle"
-            aria-label={paused ? 'Reanudar anuncios' : 'Pausar anuncios'}
+            className="hero-showcase-toggle"
+            aria-label={paused ? 'Reanudar novedades' : 'Pausar novedades'}
             onClick={() => setPaused((value) => !value)}
           >
             {paused ? <PlayIcon /> : <PauseIcon />}

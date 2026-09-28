@@ -4,7 +4,7 @@ import { PageShell } from '@/components/layout/PageShell'
 
 export function CoveragePage() {
   return (
-    <PageShell segment="hogar" title="Cobertura de fibra en Arequipa — Digo Telecom">
+    <PageShell segment="hogar">
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Cobertura en Arequipa">
           <p>

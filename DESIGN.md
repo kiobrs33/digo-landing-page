@@ -172,7 +172,7 @@ components:
     padding: "0.4rem 0.7rem"
   nav-link-active:
     textColor: "{colors.space-heading}"
-  hero-ad-board:
+  hero-showcase-board:
     backgroundColor: "{colors.space-bg}"
     textColor: "{colors.space-heading}"
     rounded: "{rounded.board}"

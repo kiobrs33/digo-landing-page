@@ -1,22 +1,38 @@
 import { useEffect, type ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 import type { Segment } from '@/config/site'
 import { getWhatsAppHref, siteConfig } from '@/config/site'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { WhatsAppFab } from '@/components/ui/FloatingActions'
+import { canonicalUrl, getPageMeta } from '@/config/seo'
 import { ScrollToTopButton } from '@/components/ui/ScrollToTop'
 
 type PageShellProps = {
   children: ReactNode
-  /** Título de la pestaña del navegador para esta ruta. */
-  title: string
   segment?: Segment
 }
 
-export function PageShell({ children, title, segment = 'hogar' }: PageShellProps) {
+function setMeta(selector: string, attribute: string, value: string) {
+  document.head.querySelector(selector)?.setAttribute(attribute, value)
+}
+
+/**
+ * Título, descripción y canónica de la ruta salen de `src/config/seo.ts`. El HTML de build ya
+ * los trae; esto los mantiene al navegar dentro del sitio sin recargar.
+ */
+export function PageShell({ children, segment = 'hogar' }: PageShellProps) {
+  const { pathname } = useLocation()
+
   useEffect(() => {
-    document.title = title
-  }, [title])
+    const meta = getPageMeta(pathname)
+    document.title = meta.title
+    setMeta('meta[name="description"]', 'content', meta.description)
+    setMeta('meta[property="og:title"]', 'content', meta.title)
+    setMeta('meta[property="og:description"]', 'content', meta.description)
+    setMeta('meta[property="og:url"]', 'content', canonicalUrl(meta.path))
+    setMeta('link[rel="canonical"]', 'href', canonicalUrl(meta.path))
+  }, [pathname])
 
   const whatsappLabel =
     segment === 'empresas'

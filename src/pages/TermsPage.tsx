@@ -5,7 +5,7 @@ import { siteConfig } from '@/config/site'
 
 export function TermsPage() {
   return (
-    <PageShell segment="hogar" title="Términos y condiciones — Digo Telecom">
+    <PageShell segment="hogar">
       <main id="contenido" tabIndex={-1} className="page-legal">
         <div className="container">
           <Link viewTransition to="/" className="back-link">

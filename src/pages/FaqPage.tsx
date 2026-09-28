@@ -5,7 +5,7 @@ import { getWhatsAppHref } from '@/config/site'
 
 export function FaqPage() {
   return (
-    <PageShell segment="hogar" title="Preguntas frecuentes — Digo Telecom">
+    <PageShell segment="hogar">
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Preguntas frecuentes">
           <p>

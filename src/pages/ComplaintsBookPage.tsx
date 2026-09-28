@@ -3,7 +3,7 @@ import { ComplaintsBookPageContent } from '@/components/legal/LegalPages'
 
 export function ComplaintsBookPage() {
   return (
-    <PageShell segment="hogar" title="Libro de reclamaciones — Digo Telecom">
+    <PageShell segment="hogar">
       <ComplaintsBookPageContent />
     </PageShell>
   )
