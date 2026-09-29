@@ -372,6 +372,71 @@ body.mobile-nav-open .site-mobile-drawer {
   background: var(--color-surface);
 }
 
+/* La pieza es un botón que abre el visor: la imagen crece un poco y aparece el ícono de lupa. */
+.hero-showcase-zoom {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.hero-showcase-zoom picture img {
+  transition: scale 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-showcase-zoom::after {
+  content: '';
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6'/%3E%3Cpath d='M20 20l-4.5-4.5M11 8.5v5M8.5 11h5'/%3E%3C/svg%3E")
+      center / 1.15rem no-repeat,
+    rgba(3, 11, 51, 0.72);
+  opacity: 0;
+  translate: 0 0.25rem;
+  transition:
+    opacity 0.25s ease-out,
+    translate 0.25s ease-out;
+  pointer-events: none;
+}
+
+.hero-showcase-zoom:hover picture img {
+  scale: 1.04;
+}
+
+.hero-showcase-zoom:hover::after,
+.hero-showcase-zoom:focus-visible::after {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* En táctil no hay hover: la lupa queda visible para que se sepa que se puede ampliar. */
+@media (hover: none) {
+  .hero-showcase-zoom::after {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.hero-showcase-zoom:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-showcase-zoom picture img,
+  .hero-showcase-zoom::after {
+    transition: none;
+  }
+}
+
 .hero-showcase-slide {
   position: absolute;
   inset: 0;
@@ -389,6 +454,11 @@ body.mobile-nav-open .site-mobile-drawer {
   opacity: 1;
   filter: blur(0);
   scale: 1;
+}
+
+/* Las piezas ocultas están apiladas encima: sin esto, el clic ampliaría otra pieza. */
+.hero-showcase-slide:not([data-active='true']) {
+  pointer-events: none;
 }
 
 .hero-showcase-slide picture img,
@@ -1670,6 +1740,183 @@ body.mobile-nav-open .site-mobile-drawer {
   background: var(--color-panel);
 }
 
+/* Yape Servicios: la vía recomendada, a todo el ancho y con marco magenta (como el plan
+   recomendado). Compacta: qué es + resultado a la izquierda, pasos en fila a la derecha. */
+.yape-card {
+  position: relative;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 2fr);
+  gap: 1.5rem 2.5rem;
+  align-items: center;
+  padding: 2rem;
+  border-color: transparent;
+  outline: 2px solid var(--color-accent);
+  outline-offset: -1px;
+  box-shadow: 0 28px 60px -28px rgba(222, 8, 126, 0.45);
+}
+
+.payment-badge {
+  position: absolute;
+  top: -0.8rem;
+  left: 2rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.yape-card-head {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.yape-card-head h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-heading);
+}
+
+.yape-card-head > p {
+  color: var(--color-text-muted);
+}
+
+.yape-card-done {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: var(--color-tint);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.yape-card-done svg {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.05rem;
+  color: var(--color-accent-text);
+}
+
+.yape-card-done strong {
+  color: var(--color-heading);
+}
+
+/* Pasos en fila: una fibra horizontal pasa por el centro de los números. */
+.yape-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.yape-steps::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-star) 70%, var(--color-line-strong));
+}
+
+.yape-steps li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.3rem;
+}
+
+.yape-step-number {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.4rem;
+  border: 2px solid var(--color-star);
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-heading);
+  font-stretch: var(--display-stretch);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.yape-steps li:first-child .yape-step-number {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.yape-steps strong {
+  color: var(--color-heading);
+  line-height: 1.25;
+}
+
+.yape-steps li > span:last-child {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+/* Pantallas medianas y móvil: todo en una columna; los pasos en vertical, fibra a la izquierda. */
+@media (max-width: 1024px) {
+  .yape-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .yape-card {
+    padding: 1.75rem 1.25rem 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .yape-card-head h2 {
+    font-size: 1.5rem;
+  }
+
+  .yape-steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+
+  .yape-steps::before {
+    top: 1rem;
+    bottom: 1rem;
+    left: calc(1rem - 1px);
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, var(--color-accent), var(--color-star) 70%, var(--color-line-strong));
+  }
+
+  .yape-steps li {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+    row-gap: 0.1rem;
+  }
+
+  .yape-step-number {
+    grid-row: span 2;
+    margin-bottom: 0;
+  }
+}
+
+.payment-receipt p > span {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+
 /* El nombre del medio es el título de la tarjeta: más grande que un extremo normal. */
 .payment-slab .fiber-endpoint h2 {
   font-size: 1.75rem;
@@ -2080,5 +2327,452 @@ body.mobile-nav-open .site-mobile-drawer {
 @media (max-width: 560px) {
   .not-found-actions .btn {
     width: 100%;
+  }
+}
+
+/* ── Nosotros: cómo trabajamos + galería de fotos y videos ── */
+.about-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.about-values {
+  display: grid;
+}
+
+.about-values li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.about-values li:first-child {
+  border-top: 1px solid var(--color-line);
+}
+
+.about-values li > span:last-child {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.about-values strong {
+  color: var(--color-heading);
+}
+
+.about-values li > span:last-child > span {
+  color: var(--color-text-muted);
+}
+
+/* Íconos de valores en azul estelar: el magenta queda para acciones y datos en movimiento. */
+.about-value-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 50%;
+  background: var(--color-tint);
+  color: var(--color-star);
+}
+
+.about-value-icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.about-gallery {
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-line);
+}
+
+.about-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.about-filter {
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 999px;
+  background: var(--color-panel);
+  color: var(--color-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-out,
+    border-color 0.2s ease-out,
+    color 0.2s ease-out;
+}
+
+.about-filter:hover {
+  border-color: var(--color-star);
+}
+
+.about-filter[aria-pressed='true'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.about-filter:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Mosaico en columnas: fotos verticales y horizontales conviven sin recortarse. */
+.about-grid {
+  columns: 3 17rem;
+  column-gap: 1.25rem;
+}
+
+.about-grid li {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+}
+
+.about-tile {
+  margin: 0;
+  /* clip, no hidden: hidden la volvería contenedor de scroll y el revelado mediría su scroll. */
+  overflow: clip;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-panel);
+  box-shadow: var(--shadow-card);
+}
+
+.about-tile-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--color-surface-alt);
+  cursor: zoom-in;
+}
+
+.about-tile-media img,
+.about-tile-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: scale 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-tile-media:hover img,
+.about-tile-media:hover video {
+  scale: 1.03;
+}
+
+.about-tile-media:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: -3px;
+}
+
+.about-tile-play {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: rgba(3, 11, 51, 0.72);
+  color: #fff;
+  translate: -50% -50%;
+}
+
+.about-tile-play svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.about-tile figcaption {
+  padding: 0.85rem 1rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.about-empty {
+  color: var(--color-text-muted);
+}
+
+.about-cta-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.about-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Visor: la foto o el video a pantalla completa sobre el espacio profundo. */
+.about-lightbox {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: clamp(3.5rem, 6vw, 4.5rem) clamp(1rem, 6vw, 5rem) 1.5rem;
+  border: 0;
+  background: transparent;
+  color: #fff;
+}
+
+.about-lightbox::backdrop {
+  background: rgba(1, 4, 20, 0.92);
+}
+
+.about-lightbox[open] {
+  display: grid;
+  place-items: center;
+  animation: lightbox-in 0.25s ease-out;
+}
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.about-lightbox-figure {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+.about-lightbox-figure img,
+.about-lightbox-figure video {
+  max-width: 100%;
+  max-height: calc(100dvh - 10rem);
+  border-radius: var(--radius-md);
+  object-fit: contain;
+}
+
+.about-lightbox-figure figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1rem;
+  max-width: 60ch;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.about-lightbox-count {
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.about-lightbox-close,
+.about-lightbox-nav {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 1px solid rgba(143, 180, 255, 0.34);
+  border-radius: 50%;
+  background: rgba(3, 11, 51, 0.8);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-out,
+    border-color 0.2s ease-out;
+}
+
+.about-lightbox-close:hover,
+.about-lightbox-nav:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+}
+
+.about-lightbox-close:focus-visible,
+.about-lightbox-nav:focus-visible {
+  outline: 2px solid #8fb4ff;
+  outline-offset: 2px;
+}
+
+.about-lightbox-close {
+  top: 1rem;
+  right: 1rem;
+}
+
+.about-lightbox-nav {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.about-lightbox-nav--prev {
+  left: 1rem;
+}
+
+.about-lightbox-nav--next {
+  right: 1rem;
+}
+
+@media (max-width: 900px) {
+  .about-story-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-lightbox-nav {
+    top: auto;
+    bottom: 1rem;
+    translate: none;
+  }
+
+  .about-lightbox-figure img,
+  .about-lightbox-figure video {
+    max-height: calc(100dvh - 12rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-tile-media img,
+  .about-tile-media video {
+    transition: none;
+  }
+
+  .about-lightbox[open] {
+    animation: none;
+  }
+}
+
+
+/* ── Movimiento de lo nuevo (Yape Servicios, Nosotros, copiar) ── */
+
+/* Copiar: confirma la acción con un destello magenta breve. */
+.payment-copy {
+  transition:
+    background-color 0.2s ease-out,
+    border-color 0.2s ease-out,
+    color 0.2s ease-out;
+}
+
+.payment-copy[aria-label$='copiado'] {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* Visor: cada foto nueva entra con un fundido y una leve escala. */
+.about-lightbox-figure img,
+.about-lightbox-figure video {
+  animation: lightbox-media-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lightbox-media-in {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+
+/* Al cambiar de filtro, las tarjetas entran en orden (retraso acotado). */
+.about-grid li {
+  animation: about-tile-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.about-grid li:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.about-grid li:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.about-grid li:nth-child(n + 4) {
+  animation-delay: 0.15s;
+}
+
+@keyframes about-tile-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* Galería: cada foto se descubre de arriba hacia abajo mientras entra en pantalla (el recorte va
+       en el contenedor, así el zoom de hover de la imagen sigue funcionando). */
+    .about-tile-media {
+      animation: photo-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* Ambos extremos explícitos: de `inset()` a `none` no se interpola (saltaría de golpe). */
+@keyframes photo-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Yape Servicios está en el primer pantallazo: la fibra se dibuja al cargar (o al volver a
+   entrar en pantalla) y cada número se enciende cuando la luz lo alcanza. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-live='true'] .yape-steps::before {
+    transform-origin: left;
+    animation: fiber-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+  }
+
+  [data-live='true'] .yape-step-number {
+    animation: fiber-node 0.4s ease-out both;
+  }
+
+  [data-live='true'] .yape-steps li:nth-child(1) .yape-step-number {
+    animation-delay: 0.2s;
+  }
+  [data-live='true'] .yape-steps li:nth-child(2) .yape-step-number {
+    animation-delay: 0.5s;
+  }
+  [data-live='true'] .yape-steps li:nth-child(3) .yape-step-number {
+    animation-delay: 0.8s;
+  }
+  [data-live='true'] .yape-steps li:nth-child(4) .yape-step-number {
+    animation-delay: 1.05s;
+  }
+
+  @media (max-width: 720px) {
+    [data-live='true'] .yape-steps::before {
+      transform-origin: top;
+      animation-name: fiber-draw-down;
+    }
+  }
+}
+
+@keyframes fiber-draw-down {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-grid li,
+  .about-lightbox-figure img,
+  .about-lightbox-figure video {
+    animation: none;
   }
 }

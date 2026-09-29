@@ -47,7 +47,7 @@ export const pageMeta: PageMeta[] = [
     path: '/medios-de-pago',
     title: 'Medios de pago — Digo Telecom',
     description:
-      'Paga tu servicio de Digo Telecom por transferencia o depósito BCP, o con Yape, y envía tu comprobante por WhatsApp.',
+      'Paga tu recibo de Digo Telecom con Yape Servicios, sin enviar comprobante, o por transferencia o depósito BCP y yapeando al número de Digo.',
     indexable: true,
   },
   {
@@ -55,6 +55,13 @@ export const pageMeta: PageMeta[] = [
     title: 'Preguntas frecuentes — Digo Telecom',
     description:
       'Respuestas sobre cobertura, velocidad, instalación, router y pagos del internet de fibra óptica de Digo Telecom en Arequipa.',
+    indexable: true,
+  },
+  {
+    path: '/nosotros',
+    title: 'Nosotros — Digo Telecom',
+    description:
+      'Conoce a Digo Telecom: el equipo, los proyectos y las actividades con los que llevamos fibra óptica a más hogares de Arequipa.',
     indexable: true,
   },
   {
@@ -102,7 +109,25 @@ function businessSchema() {
     url: `${SITE_URL}/`,
     logo: `${SITE_URL}/brand/digo-logo-256.png`,
     image: OG_IMAGE,
+    // Perfiles oficiales: ayudan a Google a asociar las redes con el negocio.
+    sameAs: siteConfig.social.flatMap((social) => (social.href ? [social.href] : [])),
     telephone: '+51 1 7012341',
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: '+51 1 7012341',
+        contactType: 'customer service',
+        areaServed: 'PE',
+        availableLanguage: 'es',
+      },
+      {
+        '@type': 'ContactPoint',
+        telephone: '+51 925 521 741',
+        contactType: 'sales',
+        areaServed: 'PE',
+        availableLanguage: 'es',
+      },
+    ],
     email: siteConfig.contact.email ?? undefined,
     address: {
       '@type': 'PostalAddress',

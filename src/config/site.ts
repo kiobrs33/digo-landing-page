@@ -28,11 +28,14 @@ export const siteConfig = {
     city: 'Arequipa, Perú',
     website: 'digo.net.pe',
   },
-  // Datos verificados en la cuenta de empresa de WhatsApp de Digo (septiembre de 2026). El mismo
-  // número atiende WhatsApp y llamadas. `null` = dato pendiente: se oculta en producción.
+  // Dos números oficiales (septiembre de 2026): el fijo (cuenta de empresa de WhatsApp verificada,
+  // también para llamadas) y un celular que atiende WhatsApp y llamadas. Los botones de WhatsApp
+  // del sitio usan el fijo. `null` = dato pendiente: se oculta en producción.
   contact: {
     phone: '+5117012341',
     phoneDisplay: '(01) 701-2341',
+    mobile: '+51925521741',
+    mobileDisplay: '925 521 741',
     email: 'team@digo.net.pe' as string | null,
     address: 'Calle Ambrosio Vucetich 130, Parque Industrial, Arequipa' as string | null,
     // Formato internacional (51 = Perú, 1 = fijo de Lima): sin código de país, wa.me no lo encuentra.
@@ -90,6 +93,7 @@ export const siteConfig = {
     { href: '/cobertura', label: 'Cobertura' },
     { href: '/medios-de-pago', label: 'Medios de pago' },
     { href: '/preguntas-frecuentes', label: 'Preguntas' },
+    { href: '/nosotros', label: 'Nosotros' },
     { href: '#contacto', label: 'Contacto' },
   ] satisfies NavLink[],
   navEmpresas: [
@@ -101,15 +105,20 @@ export const siteConfig = {
     { href: '#contacto-empresas', label: 'Contacto' },
   ] satisfies NavLink[],
   social: [
-    { id: 'facebook', label: 'Facebook', href: null },
+    {
+      id: 'facebook',
+      label: 'Facebook',
+      href: 'https://www.facebook.com/people/Digo-Telecom/61593841747060/',
+    },
     { id: 'instagram', label: 'Instagram', href: null },
-    { id: 'tiktok', label: 'TikTok', href: null },
+    { id: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@digoarequipa' },
     { id: 'youtube', label: 'YouTube', href: null },
   ] as SocialLink[],
   pages: [
     { href: '/cobertura', label: 'Cobertura' },
     { href: '/medios-de-pago', label: 'Medios de pago' },
     { href: '/preguntas-frecuentes', label: 'Preguntas frecuentes' },
+    { href: '/nosotros', label: 'Nosotros' },
   ] satisfies NavLink[],
   legal: [
     { href: '/libro-de-reclamaciones', label: 'Libro de reclamaciones' },
@@ -136,6 +145,15 @@ export function getWhatsAppHref(segment: Segment, message?: string): string {
       : siteConfig.whatsappMessages.hogar
 
   return buildWhatsAppUrl(phone, message ?? defaultMessage)
+}
+
+/** Enlaces del celular oficial (llamada y WhatsApp). */
+export function getMobilePhoneHref(): string {
+  return `tel:${siteConfig.contact.mobile}`
+}
+
+export function getMobileWhatsAppHref(message?: string): string {
+  return buildWhatsAppUrl(siteConfig.contact.mobile, message ?? siteConfig.whatsappMessages.hogar)
 }
 
 export function getPhoneHref(): string {

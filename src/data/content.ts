@@ -37,10 +37,7 @@ export const homePlans: HomePlan[] = [
     downloadMbps: 800,
     uploadMbps: 800,
     priceDisplay: 'S/ 69.00',
-    features: [
-      'Más de 130 canales HD',
-      'Canales nacionales, noticias, deportes y entretenimiento',
-    ],
+    features: ['Más de 130 canales HD', 'Canales nacionales, noticias, deportes y entretenimiento'],
     tvPackage: 'TV Digital Full',
   },
   {
@@ -239,6 +236,106 @@ export const paymentMethods: PaymentMethod[] = [
   },
 ]
 
+export type AboutCategory = 'equipo' | 'proyectos' | 'oficinas' | 'actividades'
+
+export const aboutCategories: { id: AboutCategory; label: string }[] = [
+  { id: 'equipo', label: 'Equipo' },
+  { id: 'proyectos', label: 'Proyectos' },
+  { id: 'oficinas', label: 'Oficinas' },
+  { id: 'actividades', label: 'Actividades' },
+]
+
+export type AboutMedia = {
+  id: string
+  type: 'image' | 'video'
+  category: AboutCategory
+  /**
+   * Foto: ruta en `public/nosotros/` (p. ej. `/nosotros/oficina.webp`) o URL de Cloudinary.
+   * Video: `.mp4` en `public/nosotros/` o URL de Cloudinary.
+   */
+  src: string
+  /** Versión liviana (~640 px) para la cuadrícula. Si falta, se usa `src` (o `poster`). */
+  thumb?: string
+  /** Solo videos: imagen de portada que se ve en la cuadrícula. */
+  poster?: string
+  /** Tamaño original, para reservar el espacio y que la página no salte al cargar. */
+  width: number
+  height: number
+  /** Qué se ve (para lectores de pantalla). */
+  alt: string
+  /** Texto que acompaña a la foto. */
+  caption: string
+}
+
+/**
+ * Galería de la página Nosotros. Para agregar una foto o un video: copia el archivo en
+ * `public/nosotros/` (o súbelo a Cloudinary) y añade una entrada aquí. Las categorías vacías
+ * no se muestran. Las más recientes van primero.
+ */
+export const aboutMedia: AboutMedia[] = [
+  {
+    id: 'tendido-poste',
+    type: 'image',
+    category: 'proyectos',
+    src: '/nosotros/tendido-poste.webp',
+    thumb: '/nosotros/tendido-poste-640.webp',
+    width: 700,
+    height: 1035,
+    alt: 'Técnico de Digo sobre una escalera trabajando en la caja de fibra de un poste; abajo, otro técnico junto a la camioneta de Digo',
+    caption: 'Ampliamos la red de fibra óptica en las calles de Arequipa.',
+  },
+  {
+    id: 'fusion-fibra',
+    type: 'image',
+    category: 'proyectos',
+    src: '/nosotros/fusion-fibra.webp',
+    thumb: '/nosotros/fusion-fibra-640.webp',
+    width: 820,
+    height: 670,
+    alt: 'Dos técnicos con casco y chaleco naranja fusionan fibra óptica con una empalmadora',
+    caption: 'Fusión de fibra óptica: así llevamos la conexión hasta más hogares.',
+  },
+  {
+    id: 'stand-arequipa',
+    type: 'image',
+    category: 'actividades',
+    src: '/nosotros/stand-arequipa.webp',
+    thumb: '/nosotros/stand-arequipa-640.webp',
+    width: 850,
+    height: 870,
+    alt: 'Stand de Digo Telecom con banderas y banners, un asesor atiende a dos vecinos',
+    caption: 'Nuestro stand en Arequipa: atención personalizada, cara a cara.',
+  },
+]
+
+/**
+ * Pago del recibo desde Yape → Servicios (pieza oficial de Digo, septiembre de 2026). Es la vía
+ * recomendada: el pago se registra solo, sin enviar comprobante.
+ */
+export const yapeServicesPayment = {
+  name: 'Yape Servicios',
+  description: 'Paga tu recibo mensual desde la app de Yape, en menos de un minuto.',
+  searchTerm: 'DIGO',
+  steps: [
+    { title: 'Entra a Yape', detail: 'Abre la app y elige la opción “Servicios”.' },
+    { title: 'Busca DIGO', detail: 'En el buscador de servicios escribe “DIGO” y selecciónalo.' },
+    {
+      title: 'Ingresa el DNI o RUC',
+      detail: 'Coloca el DNI o RUC del titular del servicio y pulsa “Continuar”.',
+    },
+    {
+      title: 'Selecciona tu recibo',
+      detail:
+        'Revisa el recibo pendiente, el monto y la fecha de vencimiento, y pulsa “Yapear Servicio”.',
+    },
+  ],
+  done: {
+    title: '¡Listo!',
+    detail:
+      'Verás la confirmación en Yape. Tu pago se registra automáticamente: no necesitas enviar comprobante.',
+  },
+}
+
 /** Mensaje con el que se abre WhatsApp para enviar el comprobante. */
 export const paymentReceiptMessage =
   'Hola Digo Telecom, les envío el comprobante de pago de mi servicio.'
@@ -308,6 +405,18 @@ export type HeroAd = {
 }
 
 export const heroAds: HeroAd[] = [
+  {
+    id: 'ad-yape-servicios',
+    // Pieza oficial "Paga tu recibo DIGO en Yape" (temporada Halloween 2026). El DNI del ejemplo
+    // del paso 3 está desenfocado en el archivo publicado.
+    image: {
+      src: '/promociones/digo-yape-servicios.jpg',
+      alt: 'Paga tu recibo Digo en Yape en 5 pasos: entra a Yape, busca DIGO, ingresa tu DNI o RUC, selecciona tu recibo y listo. No es necesario enviar comprobante.',
+    },
+    title: 'Paga tu recibo en Yape',
+    detail: 'Busca “DIGO” en Yape Servicios. Se registra solo: no envíes comprobante.',
+    cta: { kind: 'link', label: 'Ver cómo', href: '/medios-de-pago' },
+  },
   {
     id: 'ad-1000',
     image: promoSlides[0].image,
@@ -453,7 +562,7 @@ export const faqItems: FaqItem[] = [
     id: 'pago',
     question: '¿Qué métodos de pago aceptan?',
     answer:
-      'Puedes pagar por transferencia o depósito en BCP, o por Yape. Encuentra los datos en la página de medios de pago o pídelos a tu asesor.',
+      'La forma más rápida es Yape Servicios: busca “DIGO”, ingresa el DNI o RUC del titular y paga tu recibo; se registra solo. También puedes pagar por transferencia o depósito en BCP, o yapeando al número de Digo, y enviarnos el comprobante por WhatsApp. Encuentra los datos en la página de medios de pago.',
   },
 ]
 

@@ -353,9 +353,13 @@ Lenguaje común de las tarjetas del sitio, nacido del hero Empresas y elegido po
 - **Hero Empresas:** Tu empresa → garantías → Red Digo (2,4 s).
 - **Tarjeta de plan (cuerpo):** precio (origen) → lo que trae el plan → "Tu hogar · Conectado en 24 horas" (destino, alineado entre planes al fondo). El pulso va a la velocidad del plan: 2,4 s × 1000 / Mbps (4,8 s a 500, 2,4 s a 1000).
 - **Medio de pago:** BCP / Yape (origen, título h2) → datos con botón Copiar (copia sin espacios ni guiones) → "Envía tu comprobante" por WhatsApp (destino).
+- **Yape Servicios (recomendado):** tarjeta compacta a todo el ancho, primero, con marco magenta e insignia "Recomendado". Izquierda: título, descripción y nota "¡Listo!" (se registra solo, sin comprobante) sobre tinte. Derecha: 4 pasos en fila unidos por una fibra horizontal, el número es el nodo (el primero magenta). ≤ 1024 px: una columna; ≤ 720 px: pasos en vertical con la fibra a la izquierda. Pasos en `yapeServicesPayment` (`content.ts`).
 
 ### Testimonial Card
 Tarjeta de testimonio convencional, con la misma caja que las tarjetas de plan (panel blanco, filete fuerte, radio 16 px, `card-rest`, padding 1.75rem). Arriba, cinco estrellas magenta a la izquierda y las comillas (icono SVG magenta sobre un círculo `tint` de 2,75rem) a la derecha; al centro la cita en 1.0625rem; al pie, tras un filete, avatar circular navy de 2,75rem con las iniciales en blanco (800, ancho expandido), nombre en 700 y distrito en tinta tenue. Todas las tarjetas del carrusel miden lo mismo.
+
+### About Page (Nosotros, `/nosotros`)
+Intro de espacio; "Así trabajamos" en dos columnas (texto + lista de valores con icono magenta y filetes); "Nuestro día a día": galería en mosaico de columnas (3 → 1) con tarjetas como las de plan (panel, filete fuerte, radio 16 px, sombra), foto sin recorte y pie de foto; filtros por categoría (píldoras, activa en magenta) que solo aparecen si hay más de una categoría con contenido; visor en `<dialog>` nativo sobre velo de espacio (flechas, teclado, Escape). Los videos muestran su portada con un botón de play. Contenido en `aboutMedia` (`content.ts`), archivos en `public/nosotros/` o Cloudinary (permitido en la CSP).
 
 ### Dedicated Link Diagram (hero Empresas)
 La versión B2B del cartel de Hogar: sin publicidad, con las garantías del servicio. Titular, bajada y dos acciones a la izquierda; a la derecha, en el núcleo de la galaxia, un panel de espacio (radio 20 px, filete fuerte, caída navy, recto) con el diagrama de un enlace dedicado: nodo "Tu empresa" (círculo magenta con halo) arriba, nodo "Red Digo" (círculo azul estelar hueco) abajo, unidos por una fibra vertical de 2 px. Dos pulsos la recorren a la vez en sentidos opuestos (magenta baja, azul estelar sube: simétrico), 2,4 s por vuelta, detenidos fuera de pantalla y con movimiento reducido. De la fibra cuelgan, con nodos de 0,5rem, las garantías: SLA hasta 99,9 %, IP fija, soporte 24/7 y ancho de banda garantizado. En ≤ 900 px el diagrama va debajo de las acciones.
@@ -384,6 +388,9 @@ Toda la animación es tráfico de datos por fibra, en CSS nativo (sin librería)
 - **Cajón móvil:** baja 0,5rem en 0,35 s y sale en 0,15 s (`@starting-style` + `display` discreto); el telón entra en fundido.
 - **Cambio de vista:** View Transitions del router (`viewTransition` en los enlaces); el header tiene nombre propio y no se mueve; la vista sale en 0,16 s y entra en 0,32 s subiendo 0,75rem.
 - **Curva:** `cubic-bezier(0.16, 1, 0.3, 1)` para llegadas; salidas más cortas con `ease-in`.
+- **Yape Servicios:** al cargar (o al volver a entrar en pantalla) la fibra de los pasos se dibuja en 1,1 s y cada número se enciende cuando la luz lo alcanza (0,2 / 0,5 / 0,8 / 1,05 s); en móvil la fibra baja en vertical.
+- **Galería Nosotros:** cada foto se descubre de arriba hacia abajo mientras entra en pantalla (`clip-path` con `animation-timeline: view()` en el botón; la tarjeta usa `overflow: clip`, no `hidden`, para no volverse contenedor de scroll). Al cambiar de filtro, las tarjetas entran con un fundido escalonado (máx. 0,15 s). En el visor, cada foto entra con fundido y escala 0,97 → 1.
+- **Copiar (medios de pago):** al copiar, el botón pasa a magenta mientras dice "Copiado".
 - **Movimiento reducido:** no hay regla global que anule todo; cada pieza quita el desplazamiento y conserva fundidos y cambios de color.
 
 ### Cards / Containers

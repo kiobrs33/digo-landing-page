@@ -1,5 +1,11 @@
 import { PhoneIcon, WhatsAppIcon } from '@/components/icons/Icons'
-import { getPhoneHref, getWhatsAppHref, siteConfig } from '@/config/site'
+import {
+  getMobilePhoneHref,
+  getMobileWhatsAppHref,
+  getPhoneHref,
+  getWhatsAppHref,
+  siteConfig,
+} from '@/config/site'
 import { emailPattern, phonePattern, useWhatsAppForm } from '@/hooks/useWhatsAppForm'
 import '@/styles/landing.css'
 
@@ -26,22 +32,30 @@ export function ContactSection() {
             </p>
           </header>
 
-          {/* Un solo número atiende WhatsApp y llamadas: una fila, dos acciones. */}
+          {/* Dos números oficiales, ambos con WhatsApp y llamadas: una fila por número. */}
           <ul className="contact-channels">
-            <li>
-              <WhatsAppIcon />
-              <span>
-                WhatsApp y llamadas al {siteConfig.contact.phoneDisplay}
-                <a href={getWhatsAppHref('hogar')} target="_blank" rel="noopener noreferrer">
-                  Escribir por WhatsApp
-                </a>
-              </span>
-            </li>
             <li>
               <PhoneIcon />
               <span>
-                ¿Prefieres hablar?
-                <a href={getPhoneHref()}>Llamar al {siteConfig.contact.phoneDisplay}</a>
+                Teléfono fijo {siteConfig.contact.phoneDisplay}
+                <span className="contact-channel-actions">
+                  <a href={getPhoneHref()}>Llamar</a>
+                  <a href={getWhatsAppHref('hogar')} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                </span>
+              </span>
+            </li>
+            <li>
+              <WhatsAppIcon />
+              <span>
+                Celular {siteConfig.contact.mobileDisplay}
+                <span className="contact-channel-actions">
+                  <a href={getMobilePhoneHref()}>Llamar</a>
+                  <a href={getMobileWhatsAppHref()} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                </span>
               </span>
             </li>
           </ul>

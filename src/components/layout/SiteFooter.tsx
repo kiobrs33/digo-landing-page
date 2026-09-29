@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import { FacebookIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/components/icons/Icons'
 import { PendingNote } from '@/components/ui/PendingNote'
-import { getPhoneHref, getPublishedSocialLinks, siteConfig } from '@/config/site'
+import {
+  getMobilePhoneHref,
+  getPhoneHref,
+  getPublishedSocialLinks,
+  siteConfig,
+} from '@/config/site'
 import '@/styles/layout.css'
 
 const socialIcons = {
@@ -12,7 +17,7 @@ const socialIcons = {
 } as const
 
 export function SiteFooter() {
-  const { address, email, phoneDisplay } = siteConfig.contact
+  const { address, email, phoneDisplay, mobileDisplay } = siteConfig.contact
   const socialLinks = getPublishedSocialLinks()
 
   return (
@@ -43,6 +48,8 @@ export function SiteFooter() {
             )}
             <p>
               <a href={getPhoneHref()}>{phoneDisplay}</a>
+              {' · '}
+              <a href={getMobilePhoneHref()}>{mobileDisplay}</a>
             </p>
             <p>
               <a

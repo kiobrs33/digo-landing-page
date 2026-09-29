@@ -330,6 +330,27 @@
   text-underline-offset: 0.2em;
 }
 
+/* Número como título (heredado del span) y dos acciones en línea: Llamar · WhatsApp. */
+.contact-channels li > span {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+
+.contact-channels .contact-channel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+}
+
+.contact-channel-actions a {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .contact-form {
   padding: 1.75rem;
   display: flex;

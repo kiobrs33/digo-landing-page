@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import { WhatsAppIcon } from '@/components/icons/Icons'
+import { CheckCircleIcon, WhatsAppIcon } from '@/components/icons/Icons'
 import { PageIntro } from '@/components/layout/PageIntro'
 import { PageShell } from '@/components/layout/PageShell'
 import { PendingNote } from '@/components/ui/PendingNote'
 import { getWhatsAppHref, showPlaceholders, siteConfig } from '@/config/site'
-import { paymentMethods, paymentReceiptMessage, type PaymentMethod } from '@/data/content'
+import {
+  paymentMethods,
+  paymentReceiptMessage,
+  yapeServicesPayment,
+  type PaymentMethod,
+} from '@/data/content'
 import { useOnScreen } from '@/hooks/useOnScreen'
 
 function CopyButton({ value, label }: { value: string; label: string }) {
@@ -90,6 +95,43 @@ function PaymentSlab({ method }: { method: PaymentMethod }) {
   )
 }
 
+/**
+ * Yape Servicios, la vía recomendada. Compacta: a la izquierda qué es y el resultado (sin
+ * comprobante); a la derecha los pasos en fila, unidos por una fibra con los números como nodos.
+ */
+function YapeServicesSlab() {
+  const { name, description, steps, done } = yapeServicesPayment
+
+  return (
+    <article className="payment-slab yape-card" aria-labelledby="pago-yape-servicios">
+      <span className="payment-badge">Recomendado</span>
+
+      <div className="yape-card-head">
+        <h2 id="pago-yape-servicios">{name}</h2>
+        <p>{description}</p>
+        <p className="yape-card-done">
+          <CheckCircleIcon />
+          <span>
+            <strong>{done.title}</strong> {done.detail}
+          </span>
+        </p>
+      </div>
+
+      <ol className="yape-steps">
+        {steps.map((step, index) => (
+          <li key={step.title}>
+            <span className="yape-step-number" aria-hidden="true">
+              {index + 1}
+            </span>
+            <strong>{step.title}</strong>
+            <span>{step.detail}</span>
+          </li>
+        ))}
+      </ol>
+    </article>
+  )
+}
+
 export function PaymentsPage() {
   const [slabsRef, live] = useOnScreen<HTMLDivElement>()
 
@@ -97,12 +139,16 @@ export function PaymentsPage() {
     <PageShell segment="hogar">
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Medios de pago">
-          <p>Paga tu servicio mensual por transferencia o depósito en BCP, o con Yape.</p>
+          <p>
+            Paga tu recibo mensual con Yape Servicios, sin enviar comprobante, o por transferencia o
+            depósito BCP y yapeando al número de Digo.
+          </p>
         </PageIntro>
 
         <section className="section payments-section" aria-label="Datos de pago">
           <div className="container">
             <div ref={slabsRef} className="payment-slabs" data-live={live}>
+              <YapeServicesSlab />
               {paymentMethods.map((method) => (
                 <PaymentSlab key={method.id} method={method} />
               ))}
@@ -110,8 +156,9 @@ export function PaymentsPage() {
 
             <div className="payments-help">
               <p>
-                <strong>Recuerda:</strong> después de pagar, envíanos tu comprobante por WhatsApp
-                para registrar tu pago.
+                <strong>Recuerda:</strong> si pagaste por transferencia o depósito BCP o yapeando al
+                número de Digo, envíanos tu comprobante por WhatsApp para registrar tu pago. Con
+                Yape Servicios no hace falta.
               </p>
               <a
                 href={getWhatsAppHref('hogar', paymentReceiptMessage)}

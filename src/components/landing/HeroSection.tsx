@@ -17,9 +17,12 @@ export function HeroSection() {
       <div className="container hero-galaxy-inner">
         <div className="hero-galaxy-copy">
           <h1 id="hero-title" className="hero-galaxy-title">
-            Internet de fibra que sube tan rápido como baja
+            Fibra óptica en Arequipa, siempre contigo
           </h1>
-          <p className="hero-galaxy-lead">Fibra óptica 100% simétrica para tu hogar en Arequipa.</p>
+          <p className="hero-galaxy-lead">
+            Internet 100% simétrico: la misma velocidad para subir y bajar, con TV Digital desde 800
+            Mbps e instalación gratis en 24 horas.
+          </p>
 
           <div className="hero-galaxy-actions">
             <Link viewTransition to="/cobertura" className="btn btn-primary btn-lg">
