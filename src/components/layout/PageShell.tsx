@@ -1,6 +1,5 @@
 import { useEffect, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
-import type { Segment } from '@/config/site'
 import { getWhatsAppHref, siteConfig } from '@/config/site'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
@@ -10,7 +9,6 @@ import { ScrollToTopButton } from '@/components/ui/ScrollToTop'
 
 type PageShellProps = {
   children: ReactNode
-  segment?: Segment
 }
 
 function setMeta(selector: string, attribute: string, value: string) {
@@ -21,7 +19,7 @@ function setMeta(selector: string, attribute: string, value: string) {
  * Título, descripción y canónica de la ruta salen de `src/config/seo.ts`. El HTML de build ya
  * los trae; esto los mantiene al navegar dentro del sitio sin recargar.
  */
-export function PageShell({ children, segment = 'hogar' }: PageShellProps) {
+export function PageShell({ children }: PageShellProps) {
   const { pathname } = useLocation()
 
   useEffect(() => {
@@ -34,18 +32,15 @@ export function PageShell({ children, segment = 'hogar' }: PageShellProps) {
     setMeta('link[rel="canonical"]', 'href', canonicalUrl(meta.path))
   }, [pathname])
 
-  const whatsappLabel =
-    segment === 'empresas'
-      ? `Solicitar cotización por WhatsApp con ${siteConfig.contact.advisorName}`
-      : `Solicitar plan por WhatsApp con ${siteConfig.contact.advisorName}`
+  const whatsappLabel = `Solicitar plan por WhatsApp a ${siteConfig.brand.name}`
 
   return (
-    <div className={`page page-bg page--${segment}`}>
-      <SiteHeader segment={segment} />
+    <div className="page page-bg page--hogar">
+      <SiteHeader />
       {children}
       <SiteFooter />
       <ScrollToTopButton />
-      <WhatsAppFab href={getWhatsAppHref(segment)} label={whatsappLabel} />
+      <WhatsAppFab href={getWhatsAppHref()} label={whatsappLabel} />
     </div>
   )
 }

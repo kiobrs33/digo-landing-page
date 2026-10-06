@@ -4,11 +4,11 @@
     {
       "src": "/(.*)",
       "headers": {
-        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org https://res.cloudinary.com; font-src 'self'; media-src 'self' https://res.cloudinary.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.tile.openstreetmap.org https://res.cloudinary.com; font-src 'self'; media-src 'self' https://res.cloudinary.com; connect-src 'self' https://cms-api.digo.net.pe https://nominatim.openstreetmap.org; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY",
         "Referrer-Policy": "strict-origin-when-cross-origin",
-        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(self), payment=(), usb=()"
       },
       "continue": true
     },
@@ -20,10 +20,10 @@
       }
     },
     {
-      "src": "/digo-empresas/?",
+      "src": "/(digo-empresas|empresas)(/.*)?",
       "status": 301,
       "headers": {
-        "Location": "/empresas"
+        "Location": "https://digoempresas.pe"
       }
     },
     {
@@ -92,7 +92,7 @@
       "handle": "filesystem"
     },
     {
-      "src": "/(empresas|cobertura|medios-de-pago|preguntas-frecuentes|libro-de-reclamaciones|terminos-y-condiciones|nosotros)",
+      "src": "/(cobertura|medios-de-pago|preguntas-frecuentes|libro-de-reclamaciones|terminos-y-condiciones|nosotros)",
       "dest": "/$1/index.html"
     },
     {

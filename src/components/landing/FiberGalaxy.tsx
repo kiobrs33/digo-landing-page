@@ -250,8 +250,8 @@ export function FiberGalaxy({ speed, orbiterRef }: FiberGalaxyProps) {
       canvas.height = Math.max(1, Math.round(clientHeight * dpr))
       gl.viewport(0, 0, canvas.width, canvas.height)
       gl.uniform1f(uniforms.aspect, clientWidth / Math.max(1, clientHeight))
-      // En pantallas anchas la galaxia ocupa la mitad derecha; en móvil, todo el ancho.
-      gl.uniform1f(uniforms.scale, clientWidth > 900 ? 1.05 : 0.95)
+      // Escritorio: la galaxia rodea al cartel con holgura (crece con él); móvil: banda superior.
+      gl.uniform1f(uniforms.scale, clientWidth > 900 ? 1.26 : 0.95)
       gl.uniform1f(uniforms.dpr, dpr)
     }
 

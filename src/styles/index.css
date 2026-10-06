@@ -368,6 +368,108 @@ main:focus {
   font-weight: 500;
 }
 
+.form-error-banner {
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--color-error);
+  border-radius: 8px;
+  color: var(--color-error);
+  font-weight: 500;
+}
+
+.form-error-banner:focus {
+  outline: none;
+}
+
+.form-error-fallback {
+  margin-top: 0.5rem;
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+.form-error-fallback a {
+  color: inherit;
+  font-weight: 600;
+}
+
+.form-error-banner ul {
+  list-style: disc;
+  padding-left: 1.1rem;
+}
+
+/* Casilla de aceptación: el texto se lee junto a la casilla, que no se encoge. */
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.form-field .form-check {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.form-check input {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.15rem;
+  accent-color: var(--color-accent);
+}
+
+.form-check a {
+  color: var(--color-accent-text);
+  font-weight: 600;
+}
+
+/* Campo trampa: fuera de la vista y del orden de foco (ver HoneypotField). */
+.form-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Confirmación tras registrar un envío en la plataforma. */
+.form-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.form-result:focus {
+  outline: none;
+}
+
+.form-result-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 750;
+  font-stretch: var(--display-stretch);
+  color: var(--color-heading);
+}
+
+.form-result p {
+  color: var(--color-text-muted);
+}
+
+.form-result-code {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-heading);
+  font-variant-numeric: tabular-nums;
+}
+
+.form-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
 .page-legal {
   padding-block: clamp(2rem, 5vw, 3rem) clamp(3rem, 8vw, 5rem);
 }

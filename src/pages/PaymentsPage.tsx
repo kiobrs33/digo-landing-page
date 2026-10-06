@@ -3,7 +3,7 @@ import { CheckCircleIcon, WhatsAppIcon } from '@/components/icons/Icons'
 import { PageIntro } from '@/components/layout/PageIntro'
 import { PageShell } from '@/components/layout/PageShell'
 import { PendingNote } from '@/components/ui/PendingNote'
-import { getWhatsAppHref, showPlaceholders, siteConfig } from '@/config/site'
+import { getWhatsAppHref, officialNumbers, showPlaceholders } from '@/config/site'
 import {
   paymentMethods,
   paymentReceiptMessage,
@@ -82,13 +82,17 @@ function PaymentSlab({ method }: { method: PaymentMethod }) {
         <span className="fiber-node fiber-node--sink" aria-hidden="true" />
         <p>
           <strong>Envía tu comprobante</strong>
-          <a
-            href={getWhatsAppHref('hogar', paymentReceiptMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Por WhatsApp al {siteConfig.contact.phoneDisplay}
-          </a>
+          <span>
+            Por WhatsApp al{' '}
+            {officialNumbers(paymentReceiptMessage).map((number, index) => (
+              <span key={number.id}>
+                {index > 0 && ' o al '}
+                <a href={number.whatsapp} target="_blank" rel="noopener noreferrer">
+                  {number.display}
+                </a>
+              </span>
+            ))}
+          </span>
         </p>
       </div>
     </article>
@@ -136,7 +140,7 @@ export function PaymentsPage() {
   const [slabsRef, live] = useOnScreen<HTMLDivElement>()
 
   return (
-    <PageShell segment="hogar">
+    <PageShell>
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Medios de pago">
           <p>
@@ -161,7 +165,7 @@ export function PaymentsPage() {
                 Yape Servicios no hace falta.
               </p>
               <a
-                href={getWhatsAppHref('hogar', paymentReceiptMessage)}
+                href={getWhatsAppHref(paymentReceiptMessage)}
                 className="btn btn-primary"
                 target="_blank"
                 rel="noopener noreferrer"

@@ -2,7 +2,6 @@ import type { RouteObject } from 'react-router-dom'
 import { RootLayout } from '@/components/layout/RootLayout'
 import { ComplaintsBookPage } from '@/pages/ComplaintsBookPage'
 import { CoveragePage } from '@/pages/CoveragePage'
-import { EmpresasPage } from '@/pages/EmpresasPage'
 import { FaqPage } from '@/pages/FaqPage'
 import { HomePage } from '@/pages/HomePage'
 import { AboutPage } from '@/pages/AboutPage'
@@ -22,7 +21,6 @@ export const routes: RouteObject[] = [
       { path: '/cobertura', element: <CoveragePage /> },
       { path: '/preguntas-frecuentes', element: <FaqPage /> },
       { path: '/medios-de-pago', element: <PaymentsPage /> },
-      { path: '/empresas', element: <EmpresasPage /> },
       { path: '/nosotros', element: <AboutPage /> },
       { path: '/libro-de-reclamaciones', element: <ComplaintsBookPage /> },
       { path: '/terminos-y-condiciones', element: <TermsPage /> },

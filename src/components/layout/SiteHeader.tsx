@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { CloseIcon, MenuIcon } from '@/components/icons/Icons'
-import { siteConfig } from '@/config/site'
-import type { Segment } from '@/config/site'
+import { empresasUrl, siteConfig } from '@/config/site'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import '@/styles/layout.css'
 
-const navHogar = siteConfig.navHogar
-
-type SiteHeaderProps = {
-  segment?: Segment
-}
+const navLinks = siteConfig.nav
+const ownPath = '/'
+const sectionIds = navLinks.filter((link) => link.href.startsWith('#')).map((link) => link.href.slice(1))
 
 type NavLinkItemProps = {
   isOwnPage: boolean
@@ -56,40 +53,19 @@ function NavLinkItem({ isOwnPage, ownPath, isActive, href, label, onNavigate }: 
   )
 }
 
-function SegmentButton({
-  segment,
-  onNavigate,
-  className,
-}: {
-  segment: Segment
-  onNavigate?: () => void
-  className?: string
-}) {
-  if (segment === 'empresas') {
-    return (
-      <NavLink viewTransition to="/" className={className} onClick={onNavigate}>
-        Hogar
-      </NavLink>
-    )
-  }
-
+/** DIGO EMPRESAS vive en su propio dominio. */
+function EmpresasButton({ onNavigate, className }: { onNavigate?: () => void; className?: string }) {
   return (
-    <NavLink viewTransition to="/empresas" className={className} onClick={onNavigate}>
+    <a href={empresasUrl} className={className} onClick={onNavigate}>
       Para Empresas
-    </NavLink>
+    </a>
   )
 }
 
-export function SiteHeader({ segment = 'hogar' }: SiteHeaderProps) {
+export function SiteHeader() {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const ownPath = segment === 'empresas' ? '/empresas' : '/'
   const isOwnPage = location.pathname === ownPath
-  const navLinks = segment === 'empresas' ? siteConfig.navEmpresas : navHogar
-  const sectionIds = useMemo(
-    () => navLinks.filter((link) => link.href.startsWith('#')).map((link) => link.href.slice(1)),
-    [navLinks],
-  )
   const activeSectionId = useActiveSection(sectionIds, ownPath)
 
   // Cerrar el menú al navegar (ajuste durante el render, sin efecto extra).
@@ -178,7 +154,7 @@ export function SiteHeader({ segment = 'hogar' }: SiteHeaderProps) {
         Saltar al contenido
       </a>
       <header
-        className={`site-header theme-space site-header--${segment}${menuOpen ? ' site-header--menu-open' : ''}`}
+        className={`site-header theme-space${menuOpen ? ' site-header--menu-open' : ''}`}
       >
         <div className="container site-header-inner">
           <Link
@@ -189,7 +165,7 @@ export function SiteHeader({ segment = 'hogar' }: SiteHeaderProps) {
           >
             <img
               className="site-logo-mark"
-              src="/brand/digo-logo-128.png"
+              src={siteConfig.brand.logoUrl}
               alt=""
               width={40}
               height={40}
@@ -203,7 +179,7 @@ export function SiteHeader({ segment = 'hogar' }: SiteHeaderProps) {
           </nav>
 
           <div className="site-header-actions site-header-actions--desktop">
-            <SegmentButton segment={segment} className="btn btn-sm btn-nav-empresas" />
+            <EmpresasButton className="btn btn-sm btn-nav-empresas" />
           </div>
 
           <button
@@ -230,11 +206,7 @@ export function SiteHeader({ segment = 'hogar' }: SiteHeaderProps) {
               <ul className="site-mobile-nav-list">
                 {renderNavLinks('mobile')}
                 <li className="site-mobile-nav-cta">
-                  <SegmentButton
-                    segment={segment}
-                    onNavigate={closeMenu}
-                    className="btn btn-sm btn-nav-empresas"
-                  />
+                  <EmpresasButton onNavigate={closeMenu} className="btn btn-sm btn-nav-empresas" />
                 </li>
               </ul>
             </nav>

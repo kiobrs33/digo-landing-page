@@ -29,7 +29,7 @@ export function ProcessSection() {
             Consultar cobertura
           </Link>
           <a
-            href={getWhatsAppHref('hogar')}
+            href={getWhatsAppHref()}
             className="btn btn-secondary"
             target="_blank"
             rel="noopener noreferrer"

@@ -1,115 +1,136 @@
-import { lazy, useState } from 'react'
-import { MapPinIcon } from '@/components/icons/Icons'
-import { getWhatsAppHref, siteConfig } from '@/config/site'
-import { checkCoverage, coverageZones } from '@/data/content'
+import { lazy, useState, type CSSProperties } from 'react'
+import { ExpandIcon, LocateIcon, MapPinIcon, WhatsAppIcon } from '@/components/icons/Icons'
+import { CoverageAnswer } from '@/components/landing/CoverageAnswer'
+import type { CoverageFocus } from '@/components/landing/CoverageMap'
 import { DeferredMap } from '@/components/ui/DeferredMap'
+import { siteConfig } from '@/config/site'
+import { coverageZones } from '@/data/content'
+import { useCoverageLocate } from '@/hooks/useCoverageLocate'
 import '@/styles/landing.css'
 
 const CoverageMap = lazy(() =>
   import('@/components/landing/CoverageMap').then((module) => ({ default: module.CoverageMap })),
 )
 
+const zonesHint =
+  coverageZones.length === 1
+    ? 'Toca la zona para acercarte en el mapa.'
+    : `${coverageZones.length} zonas de Arequipa. Toca una para acercarte en el mapa.`
+
 export function CoverageSection() {
-  const [address, setAddress] = useState('')
-  const [result, setResult] = useState<ReturnType<typeof checkCoverage> | null>(null)
-  // Cada consulta vuelve a montar el resultado para que su entrada confirme la búsqueda.
-  const [checkCount, setCheckCount] = useState(0)
+  const [focus, setFocus] = useState<CoverageFocus>({ kind: 'all' })
+  const [hoverZoneId, setHoverZoneId] = useState<string | null>(null)
+  const { answer, answerCount, locating, locate, whatsappHref } = useCoverageLocate((at) =>
+    setFocus({ kind: 'point', at }),
+  )
 
-  function handleCheck() {
-    setResult(checkCoverage(address))
-    setCheckCount((count) => count + 1)
-  }
+  const selectedZoneId = focus.kind === 'zone' ? focus.id : null
+  const selectedZone = coverageZones.find((zone) => zone.id === selectedZoneId)
+  const userPosition = answer?.source === 'location' ? answer.at : null
 
-  function getWhatsAppCoverageHref() {
-    return getWhatsAppHref(
-      'hogar',
-      siteConfig.whatsappMessages.cobertura(address || 'mi dirección'),
-    )
+  function selectZone(id: string) {
+    setFocus({ kind: 'zone', id })
   }
 
   return (
-    <section id="cobertura" className="section coverage-section" aria-label="Consulta de cobertura">
-      <div className="container">
-        <div className="coverage-panel float-card">
-          <div className="coverage-search">
-            <label htmlFor="coverage-address" className="coverage-search-label">
-              <MapPinIcon />
-              Consulta tu dirección o zona
-            </label>
-            <div className="coverage-search-row">
-              <input
-                id="coverage-address"
-                type="text"
-                placeholder="Ej: Jr. Lima 120, Arequipa"
-                value={address}
-                onChange={(event) => setAddress(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') handleCheck()
-                }}
-              />
-              <button type="button" className="btn btn-primary" onClick={handleCheck}>
-                Consultar
-              </button>
-            </div>
+    <section id="cobertura" className="section coverage-section" aria-labelledby="coverage-title">
+      <div className="container coverage-layout">
+        <div className="coverage-panel">
+          <h2 id="coverage-title" className="coverage-panel-title">
+            Zonas con fibra {siteConfig.brand.shortName}
+          </h2>
+          <p className="coverage-panel-hint">{zonesHint}</p>
 
-            {result && (
-              <div
-                key={checkCount}
-                className={`coverage-result coverage-result--${result.result}`}
-                role="status"
-              >
-                {result.result === 'empty' && (
-                  <p>Ingresa tu dirección en Arequipa para consultar cobertura.</p>
-                )}
-                {result.result === 'in-zone' && (
-                  <p>
-                    <strong>¡Buenas noticias!</strong> Tu consulta coincide con nuestra zona
-                    activa de {result.zone}. Escríbenos para confirmar la instalación en tu
-                    dirección exacta.
-                  </p>
-                )}
-                {result.result === 'maybe' && (
-                  <p>
-                    Estás en Arequipa pero fuera de nuestras zonas confirmadas. Escríbenos por
-                    WhatsApp para verificar disponibilidad.
-                  </p>
-                )}
-                {result.result === 'out-of-zone' && (
-                  <p>
-                    Por ahora no tenemos cobertura confirmada en esa zona. Déjanos tu consulta y te
-                    avisamos cuando expandamos.
-                  </p>
-                )}
-                {result.result !== 'empty' && (
-                  <a
-                    href={getWhatsAppCoverageHref()}
-                    className="btn btn-secondary coverage-wa"
-                    target="_blank"
-                    rel="noopener noreferrer"
+          <div className="coverage-zones-block">
+            <ul className="coverage-zones" aria-label="Zonas con cobertura">
+              <li>
+                <button
+                  type="button"
+                  className="coverage-zone"
+                  aria-pressed={focus.kind === 'all'}
+                  onClick={() => setFocus({ kind: 'all' })}
+                >
+                  <ExpandIcon />
+                  Todas
+                </button>
+              </li>
+              {coverageZones.map((zone) => (
+                <li key={zone.id}>
+                  <button
+                    type="button"
+                    className="coverage-zone"
+                    aria-pressed={selectedZoneId === zone.id}
+                    onClick={() => selectZone(zone.id)}
+                    onMouseEnter={() => setHoverZoneId(zone.id)}
+                    onMouseLeave={() => setHoverZoneId(null)}
+                    onFocus={() => setHoverZoneId(zone.id)}
+                    onBlur={() => setHoverZoneId(null)}
                   >
-                    Consultar por WhatsApp
-                  </a>
-                )}
-              </div>
+                    <span
+                      className="coverage-zone-swatch"
+                      style={{ '--zone-color': zone.color } as CSSProperties}
+                      aria-hidden="true"
+                    />
+                    {zone.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {selectedZone?.detail && (
+              <p className="coverage-zone-note">
+                <span
+                  className="coverage-zone-swatch"
+                  style={{ '--zone-color': selectedZone.color } as CSSProperties}
+                  aria-hidden="true"
+                />
+                {selectedZone.detail}
+              </p>
             )}
           </div>
 
-          <div className="coverage-map-wrap">
-            <DeferredMap placeholderClassName="coverage-map">
-              <CoverageMap />
-            </DeferredMap>
+          <button
+            type="button"
+            className="btn btn-primary coverage-locate"
+            onClick={locate}
+            disabled={locating}
+            aria-busy={locating}
+          >
+            <LocateIcon />
+            {locating ? 'Buscando tu ubicación…' : 'Usar mi ubicación'}
+          </button>
+
+          <div aria-live="polite">
+            {answer && <CoverageAnswer key={answerCount} answer={answer} />}
           </div>
 
-          <ul className="coverage-legend" aria-label="Distritos con cobertura">
-            {coverageZones.map((zone) => (
-              <li key={zone.id}>
-                <span className="coverage-legend-swatch" style={{ background: zone.color }} />
-                {zone.name}
-              </li>
-            ))}
-          </ul>
+          <a
+            href={whatsappHref}
+            aria-label="Enviar mi dirección por WhatsApp"
+            className="coverage-whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <WhatsAppIcon />
+            Enviar mi dirección
+          </a>
+        </div>
+
+        <div className="coverage-map-wrap">
+          <p className="coverage-map-chip" aria-hidden="true">
+            <MapPinIcon />
+            Zonas de cobertura
+          </p>
+          <DeferredMap placeholderClassName="coverage-map">
+            <CoverageMap
+              focus={focus}
+              activeZoneId={hoverZoneId ?? selectedZoneId}
+              userPosition={userPosition}
+              onSelectZone={selectZone}
+            />
+          </DeferredMap>
         </div>
       </div>
     </section>
   )
 }
+

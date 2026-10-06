@@ -1,30 +1,32 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronIcon, CloseIcon, PauseIcon, PlayIcon, WhatsAppIcon } from '@/components/icons/Icons'
 import { getWhatsAppHref, siteConfig } from '@/config/site'
-import { heroAds, type HeroAd } from '@/data/content'
+import { imageSrcSet, imageUrl, isSlideLive } from '@/data/cms'
+import { heroAds as builtAds, type HeroAd } from '@/data/content'
 import { useCarousel } from '@/hooks/useCarousel'
 
 const AUTOPLAY_MS = 6500
-
-function webpSrcSet(src: string) {
-  return [640, 1080]
-    .map((width) => `${src.replace(/\.jpg$/, `-${width}.webp`)} ${width}w`)
-    .join(', ')
-}
+const noopSubscribe = () => () => {}
 
 function AdCta({ ad }: { ad: HeroAd }) {
   const { cta } = ad
+  if (!cta) return null
   if (cta.kind === 'link') {
-    return (
+    // Rutas del sitio con el router; URLs externas en una pestaña nueva.
+    return cta.href.startsWith('/') ? (
       <Link viewTransition to={cta.href} className="btn btn-primary hero-showcase-cta">
         {cta.label}
       </Link>
+    ) : (
+      <a href={cta.href} target="_blank" rel="noopener noreferrer" className="btn btn-primary hero-showcase-cta">
+        {cta.label}
+      </a>
     )
   }
   return (
     <a
-      href={getWhatsAppHref('hogar', siteConfig.whatsappMessages.plan(cta.planName))}
+      href={getWhatsAppHref(siteConfig.whatsappMessages.plan(cta.planName))}
       target="_blank"
       rel="noopener noreferrer"
       className="btn btn-primary hero-showcase-cta"
@@ -40,6 +42,12 @@ function AdCta({ ad }: { ad: HeroAd }) {
  * pasar el mouse o enfocar, cuando sale de pantalla y con movimiento reducido.
  */
 export function HeroAdBoard() {
+  // El HTML de build trae las piezas vigentes al publicar. Ya en el navegador (tras hidratar) se
+  // vuelve a revisar la vigencia: una pieza vencida o programada a futuro no espera a la próxima
+  // publicación.
+  const hydrated = useSyncExternalStore(noopSubscribe, () => true, () => false)
+  const heroAds = useMemo(() => (hydrated ? builtAds.filter((ad) => isSlideLive(ad)) : builtAds), [hydrated])
+
   const carousel = useCarousel({ count: heroAds.length, loop: true })
   const { index, goTo, goPrev, goNext } = carousel
   const [paused, setPaused] = useState(false)
@@ -121,9 +129,9 @@ export function HeroAdBoard() {
           >
             <img
               className="hero-showcase-backdrop"
-              // Fondo desenfocado: basta la versión webp pequeña. La primera pieza es la imagen
-              // más grande del primer pantallazo (LCP), así que carga sin esperar.
-              src={item.image.src.replace(/\.jpg$/, '-640.webp')}
+              // Fondo desenfocado: basta la versión pequeña. La primera pieza es la imagen más
+              // grande del primer pantallazo (LCP), así que carga sin esperar.
+              src={imageUrl(item.image.src, 640)}
               alt=""
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
@@ -137,13 +145,12 @@ export function HeroAdBoard() {
               onClick={() => setZoomIndex(i)}
             >
               <picture>
-                <source
-                  type="image/webp"
-                  srcSet={webpSrcSet(item.image.src)}
-                  sizes="(max-width: 900px) 90vw, 24rem"
-                />
                 <img
-                  src={item.image.src}
+                  src={imageUrl(item.image.src, 1080)}
+                  srcSet={imageSrcSet(item.image.src, [640, 1080])}
+                  sizes="(max-width: 900px) 90vw, 24rem"
+                  width={item.image.width}
+                  height={item.image.height}
                   alt={i === index ? item.image.alt : ''}
                   loading={i === 0 ? 'eager' : 'lazy'}
                   fetchPriority={i === 0 ? 'high' : undefined}
@@ -175,6 +182,35 @@ export function HeroAdBoard() {
             </button>
           </>
         )}
+
+        {/* Progreso y pausa arriba de la pieza, como las historias: se entiende de un vistazo
+            cuántas novedades hay y cuál corre, sin una franja más bajo el cartel. */}
+        {heroAds.length > 1 && (
+          <div className="hero-showcase-controls">
+            <div className="hero-showcase-tabs">
+              {heroAds.map((item, i) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="hero-showcase-tab"
+                  aria-current={i === index}
+                  aria-label={`Novedad ${i + 1} de ${heroAds.length}: ${item.title}`}
+                  onClick={() => goTo(i)}
+                >
+                  <span key={i === index ? `on-${index}` : 'off'} />
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="hero-showcase-toggle"
+              aria-label={paused ? 'Reanudar novedades' : 'Pausar novedades'}
+              onClick={() => setPaused((value) => !value)}
+            >
+              {paused ? <PlayIcon /> : <PauseIcon />}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Todas las franjas de texto ocupan la misma celda: el cartel mide siempre lo que la más
@@ -197,33 +233,6 @@ export function HeroAdBoard() {
         ))}
       </div>
 
-      {heroAds.length > 1 && (
-        <div className="hero-showcase-controls">
-          <div className="hero-showcase-tabs">
-            {heroAds.map((item, i) => (
-              <button
-                key={item.id}
-                type="button"
-                className="hero-showcase-tab"
-                aria-current={i === index}
-                aria-label={`Novedad ${i + 1} de ${heroAds.length}: ${item.title}`}
-                onClick={() => goTo(i)}
-              >
-                <span key={i === index ? `on-${index}` : 'off'} />
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="hero-showcase-toggle"
-            aria-label={paused ? 'Reanudar novedades' : 'Pausar novedades'}
-            onClick={() => setPaused((value) => !value)}
-          >
-            {paused ? <PlayIcon /> : <PauseIcon />}
-          </button>
-        </div>
-      )}
-
       <dialog
         ref={zoomRef}
         className="about-lightbox"
@@ -240,8 +249,7 @@ export function HeroAdBoard() {
         {zoomed && (
           <figure className="about-lightbox-figure">
             <picture key={zoomed.id}>
-              <source type="image/webp" srcSet={zoomed.image.src.replace(/\.jpg$/, '-1080.webp')} />
-              <img src={zoomed.image.src} alt={zoomed.image.alt} />
+              <img src={imageUrl(zoomed.image.src, 1600)} alt={zoomed.image.alt} />
             </picture>
             <figcaption>
               {zoomed.title}

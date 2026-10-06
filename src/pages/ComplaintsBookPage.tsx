@@ -3,7 +3,7 @@ import { ComplaintsBookPageContent } from '@/components/legal/LegalPages'
 
 export function ComplaintsBookPage() {
   return (
-    <PageShell segment="hogar">
+    <PageShell>
       <ComplaintsBookPageContent />
     </PageShell>
   )

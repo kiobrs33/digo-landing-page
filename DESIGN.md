@@ -404,7 +404,7 @@ Toda la animación es tráfico de datos por fibra, en CSS nativo (sin librería)
 - **Contenedor:** el formulario Empresas va en Lavado Orbital con filete y radio 16 px, sobre sección blanca.
 
 ### Coverage Maps
-Teselas OSM normales, sin filtro. Polígonos de distrito con contorno blanco de 3 px y relleno al 35 %: Centro en azul estelar día, Socabaya en magenta. En Empresas, marcadores circulares de ciudad magenta al 75 % con contorno blanco de 3 px y rótulo fijo en navy 700. Leyenda con cuadros de 1rem.
+Teselas OSM normales, sin filtro. Polígonos de distrito administrados desde el panel (Contenido → Zonas de cobertura), cada uno con un color de la paleta del panel, contorno lleno y relleno suave. Las zonas se eligen con chips (Todas + una por zona); los nombres fijos en el mapa solo aparecen desde zoom 10 o en la zona resaltada. En Empresas, marcadores circulares de ciudad magenta al 75 % con contorno blanco de 3 px y rótulo fijo en navy 700. Leyenda con cuadros de 1rem.
 
 ### Page Intro y Footer
 La intro de cada vista aparte es una banda `.theme-space` con campo estelar, titular page-intro y lead. El footer es plano, `.theme-space` con campo estelar, filete superior fuerte y el pulso de fibra; tres columnas (marca 2fr, enlaces, redes) que pasan a una en ≤ 1024 px.

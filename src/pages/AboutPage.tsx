@@ -106,7 +106,7 @@ export function AboutPage() {
   }
 
   return (
-    <PageShell segment="hogar">
+    <PageShell>
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Nosotros">
           <p>
@@ -196,7 +196,7 @@ export function AboutPage() {
                 Consultar cobertura
               </Link>
               <a
-                href={getWhatsAppHref('hogar')}
+                href={getWhatsAppHref()}
                 className="btn btn-secondary btn-lg"
                 target="_blank"
                 rel="noopener noreferrer"

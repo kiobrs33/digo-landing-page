@@ -1,24 +1,38 @@
 import { Link } from 'react-router-dom'
-import { FacebookIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from '@/components/icons/Icons'
-import { PendingNote } from '@/components/ui/PendingNote'
 import {
-  getMobilePhoneHref,
-  getPhoneHref,
-  getPublishedSocialLinks,
-  siteConfig,
-} from '@/config/site'
+  FacebookIcon,
+  InstagramIcon,
+  LinkIcon,
+  LinkedInIcon,
+  TikTokIcon,
+  XIcon,
+  YouTubeIcon,
+} from '@/components/icons/Icons'
+import { empresasUrl, getMobilePhoneHref, getPhoneHref, siteConfig, type SocialLink } from '@/config/site'
 import '@/styles/layout.css'
 
 const socialIcons = {
-  facebook: FacebookIcon,
-  instagram: InstagramIcon,
-  tiktok: TikTokIcon,
-  youtube: YouTubeIcon,
+  FACEBOOK: FacebookIcon,
+  INSTAGRAM: InstagramIcon,
+  TIKTOK: TikTokIcon,
+  YOUTUBE: YouTubeIcon,
+  LINKEDIN: LinkedInIcon,
+  X: XIcon,
+  OTRA: LinkIcon,
 } as const
+
+function SocialIcon({ social }: { social: SocialLink }) {
+  if (social.iconUrl) {
+    return <img src={social.iconUrl} alt="" width={20} height={20} loading="lazy" decoding="async" />
+  }
+  const Icon = socialIcons[social.network]
+  return <Icon />
+}
 
 export function SiteFooter() {
   const { address, email, phoneDisplay, mobileDisplay } = siteConfig.contact
-  const socialLinks = getPublishedSocialLinks()
+  const mobileHref = getMobilePhoneHref()
+  const socialLinks = siteConfig.social
 
   return (
     <footer className="site-footer theme-space starfield" data-fab-surface="dark">
@@ -28,7 +42,7 @@ export function SiteFooter() {
             <p className="site-footer-name">
               <img
                 className="site-footer-logo"
-                src="/brand/digo-logo-128.png"
+                src={siteConfig.brand.logoUrl}
                 alt=""
                 width={48}
                 height={48}
@@ -38,18 +52,18 @@ export function SiteFooter() {
               {siteConfig.brand.name}
             </p>
             <p className="site-footer-tagline">{siteConfig.brand.tagline}</p>
-            {address ? <p>{address}</p> : <PendingNote>Dirección pendiente</PendingNote>}
-            {email ? (
-              <p>
-                <a href={`mailto:${email}`}>{email}</a>
-              </p>
-            ) : (
-              <PendingNote>Correo pendiente</PendingNote>
-            )}
+            <p>{address}</p>
+            <p>
+              <a href={`mailto:${email}`}>{email}</a>
+            </p>
             <p>
               <a href={getPhoneHref()}>{phoneDisplay}</a>
-              {' · '}
-              <a href={getMobilePhoneHref()}>{mobileDisplay}</a>
+              {mobileHref && mobileDisplay && (
+                <>
+                  {' · '}
+                  <a href={mobileHref}>{mobileDisplay}</a>
+                </>
+              )}
             </p>
             <p>
               <a
@@ -73,9 +87,7 @@ export function SiteFooter() {
                 </li>
               ))}
               <li>
-                <Link viewTransition to="/empresas">
-                  Para Empresas
-                </Link>
+                <a href={empresasUrl}>Para Empresas</a>
               </li>
               {siteConfig.legal.map((item) => (
                 <li key={item.href}>
@@ -91,25 +103,14 @@ export function SiteFooter() {
             <div>
               <p className="site-footer-heading">Redes sociales</p>
               <ul className="site-footer-social">
-                {socialLinks.map((social) => {
-                  const Icon = socialIcons[social.id]
-                  return (
-                    <li key={social.id}>
-                      {social.href ? (
-                        <a href={social.href} target="_blank" rel="noopener noreferrer">
-                          <Icon />
-                          <span>{social.label}</span>
-                        </a>
-                      ) : (
-                        <span className="site-footer-social-placeholder">
-                          <Icon />
-                          <span>{social.label}</span>
-                          <PendingNote>URL pendiente</PendingNote>
-                        </span>
-                      )}
-                    </li>
-                  )
-                })}
+                {socialLinks.map((social) => (
+                  <li key={social.id}>
+                    <a href={social.href} target="_blank" rel="noopener noreferrer">
+                      <SocialIcon social={social} />
+                      <span>{social.label}</span>
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           )}

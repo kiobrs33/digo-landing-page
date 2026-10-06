@@ -10,7 +10,7 @@ import { getWhatsAppHref } from '@/config/site'
  */
 export function NotFoundPage() {
   return (
-    <PageShell segment="hogar">
+    <PageShell>
       <main id="contenido" tabIndex={-1}>
         <PageIntro title="Página no encontrada">
           <p>La página que buscas no existe o ya no está disponible.</p>
@@ -32,7 +32,7 @@ export function NotFoundPage() {
               Consultar cobertura
             </Link>
             <a
-              href={getWhatsAppHref('hogar')}
+              href={getWhatsAppHref()}
               className="btn btn-secondary"
               target="_blank"
               rel="noopener noreferrer"

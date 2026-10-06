@@ -68,6 +68,21 @@ export function ArrowUpIcon() {
   )
 }
 
+/** Subida y bajada a la par: internet simétrico. */
+export function SymmetricIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M8 20V4M8 4L4 8M8 4l4 4M16 4v16M16 20l-4-4M16 20l4-4"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 export function ChevronIcon({ direction = 'down' }: { direction?: 'down' | 'left' | 'right' }) {
   const rotation = direction === 'left' ? 90 : direction === 'right' ? -90 : 0
   return (
@@ -93,6 +108,26 @@ export function MapPinIcon() {
         strokeWidth="2"
       />
       <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  )
+}
+
+/** Ver todo: flechas hacia las esquinas. */
+export function ExpandIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+    </svg>
+  )
+}
+
+/** Usar mi ubicación: mira de localización. */
+export function LocateIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="7" />
+      <circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
     </svg>
   )
 }
@@ -163,6 +198,39 @@ export function YouTubeIcon() {
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
       <rect width="24" height="24" rx="5" fill="#FF0000" />
       <path fill="#fff" d="M10 8.5v7l6-3.5-6-3.5z" />
+    </svg>
+  )
+}
+
+export function LinkedInIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <rect width="24" height="24" rx="4" fill="#0A66C2" />
+      <path
+        fill="#fff"
+        d="M7.1 9.6h2.3V17H7.1V9.6zm1.15-3.7a1.33 1.33 0 110 2.66 1.33 1.33 0 010-2.66zM10.9 9.6h2.2v1h.03c.31-.58 1.06-1.2 2.18-1.2 2.33 0 2.76 1.53 2.76 3.53V17h-2.3v-3.6c0-.86-.02-1.97-1.2-1.97-1.2 0-1.38.94-1.38 1.9V17h-2.3V9.6z"
+      />
+    </svg>
+  )
+}
+
+export function XIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.65l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64z"
+      />
+    </svg>
+  )
+}
+
+/** Enlace genérico, para redes sin ícono propio. */
+export function LinkIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10 13a5 5 0 007.07 0l3-3a5 5 0 00-7.07-7.07l-1.5 1.5" />
+      <path d="M14 11a5 5 0 00-7.07 0l-3 3a5 5 0 007.07 7.07l1.5-1.5" />
     </svg>
   )
 }
@@ -335,6 +403,23 @@ export function PauseIcon() {
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" />
       <rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" />
+    </svg>
+  )
+}
+
+export function SparklesIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M10 3.5l1.6 4.4a2 2 0 001.2 1.2l4.4 1.6-4.4 1.6a2 2 0 00-1.2 1.2L10 17.9l-1.6-4.4a2 2 0 00-1.2-1.2L2.8 10.7l4.4-1.6a2 2 0 001.2-1.2L10 3.5z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M18.5 14.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8zM18 2.5l.5 1.3 1.3.5-1.3.5-.5 1.3-.5-1.3-1.3-.5 1.3-.5.5-1.3z"
+        fill="currentColor"
+      />
     </svg>
   )
 }

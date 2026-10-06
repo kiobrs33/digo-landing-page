@@ -1,5 +1,5 @@
 import { siteConfig } from '@/config/site'
-import { coverageZones, faqItems, homePlans } from '@/data/content'
+import { coverageZones, faqItems, homePlans, tvFromMbps } from '@/data/content'
 
 /** Dirección canónica del sitio: www es la principal (digo.net.pe redirige aquí). */
 export const SITE_URL = 'https://www.digo.net.pe'
@@ -20,21 +20,16 @@ const speedsText =
   planSpeeds.length > 1
     ? `${planSpeeds.slice(0, -1).join(', ')} y ${planSpeeds[planSpeeds.length - 1]} Mbps`
     : `${planSpeeds[0]} Mbps`
-const zonesText = coverageZones.map((zone) => zone.name).join(' y ')
+const zonesText = new Intl.ListFormat('es', { type: 'conjunction' }).format(
+  coverageZones.map((zone) => zone.name),
+)
 
 /** Una entrada por ruta: única fuente de títulos, descripciones y del sitemap. */
 export const pageMeta: PageMeta[] = [
   {
     path: '/',
     title: 'Digo Telecom — Fibra óptica en Arequipa',
-    description: `Internet de fibra óptica 100% simétrica en Arequipa: planes de ${speedsText}, TV Digital desde 800 Mbps e instalación gratis en 24 horas.`,
-    indexable: true,
-  },
-  {
-    path: '/empresas',
-    title: 'Internet dedicado para empresas en Arequipa — Digo Telecom',
-    description:
-      'Enlaces dedicados simétricos con IP fija, SLA por contrato y soporte 24/7 para empresas e instituciones en Arequipa, Moquegua y Mollendo. Cotización formal con RUC.',
+    description: `Internet de fibra óptica 100% simétrica en Arequipa: planes de ${speedsText}, ${tvFromMbps ? `TV Digital desde ${tvFromMbps} Mbps ` : ''}e instalación gratis en 24 horas.`,
     indexable: true,
   },
   {

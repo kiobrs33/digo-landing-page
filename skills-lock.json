@@ -43,11 +43,17 @@
       "skillPath": "skills/design-and-ui/gsap-framer-scroll-animation/SKILL.md",
       "computedHash": "e5b040e5ae6c3de50b2668cae4c2050e10a283c14aee630af6331af4485ef6aa"
     },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "f663c52fe49d805ed1b0d19e466a14034594130a4847e9726d8bfb8587c7186a"
+    },
     "playwright-cli": {
       "source": "microsoft/playwright-cli",
       "sourceType": "github",
       "skillPath": "skills/playwright-cli/SKILL.md",
-      "computedHash": "1e6cef0264b72fbf47618ccb82644b9a72934b2eeb35186842332928492a3cd2"
+      "computedHash": "ffbd59a973d4e2c19c6ecc31254a14497069c362f1d1820b6a6cfbe62de34a73"
     },
     "seo-technical": {
       "source": "agricidaniel/claude-seo",

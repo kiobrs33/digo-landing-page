@@ -1,21 +1,19 @@
-import { BenefitsSection } from '@/components/landing/BenefitsSection'
 import { ContactSection } from '@/components/landing/ContactSection'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { PlansSection } from '@/components/landing/PlansSection'
 import { ProcessSection } from '@/components/landing/ProcessSection'
-import { ServicesSection } from '@/components/landing/ServicesSection'
 import { TestimonialsSection } from '@/components/landing/TestimonialsSection'
+import { TrustSection } from '@/components/landing/TrustSection'
 import { PageShell } from '@/components/layout/PageShell'
 
 export function HomePage() {
   return (
-    <PageShell segment="hogar">
+    <PageShell>
       <main id="contenido" tabIndex={-1}>
         <HeroSection />
         <PlansSection />
-        <BenefitsSection />
-        <ServicesSection />
         <ProcessSection />
+        <TrustSection />
         <TestimonialsSection />
         <ContactSection />
       </main>

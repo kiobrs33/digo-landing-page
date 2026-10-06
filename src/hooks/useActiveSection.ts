@@ -19,10 +19,13 @@ export function useActiveSection(sectionIds: readonly string[], ownPath: string 
       const offset = getStickyOffset()
       let current: string | null = null
 
+      // Activa solo mientras se está dentro: pasada la sección, el enlace se apaga (las
+      // secciones que no están en el menú no dejan encendida la anterior).
       for (const id of sectionIds) {
         const element = document.getElementById(id)
         if (!element) continue
-        if (element.getBoundingClientRect().top <= offset) {
+        const { top, bottom } = element.getBoundingClientRect()
+        if (top <= offset && bottom > offset) {
           current = id
         }
       }

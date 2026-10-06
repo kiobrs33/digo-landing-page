@@ -1,9 +1,12 @@
-export type SocialNetwork = 'facebook' | 'instagram' | 'tiktok' | 'youtube'
+import { type CmsSocialNetwork, imageUrl, siteContent } from '@/data/cms'
 
 export type SocialLink = {
-  id: SocialNetwork
+  id: string
+  network: CmsSocialNetwork
   label: string
-  href: string | null
+  href: string
+  /** Ícono propio subido en el panel; si falta, se usa el oficial de la red. */
+  iconUrl: string | null
 }
 
 export type NavLink = {
@@ -11,109 +14,93 @@ export type NavLink = {
   label: string
 }
 
-export type Segment = 'hogar' | 'empresas'
-
 /**
  * El contenido de relleno (datos sin confirmar, testimonios de ejemplo, avisos de
  * desarrollo) solo se muestra en `npm run dev`. En producción se oculta.
  */
 export const showPlaceholders = import.meta.env.DEV
 
+const { company } = siteContent
+
+/** Sitio de DIGO EMPRESAS (otro dominio). */
+export const empresasUrl = import.meta.env.VITE_EMPRESAS_URL || 'https://digoempresas.pe'
+
+/** API de digo-landing-backend (formularios). Vacía = mismo origen (`/api`, proxy en local). */
+export const apiUrl = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
+
+// Marca, contacto y redes: se editan en el panel (Contenido → Datos de la empresa / Redes).
 export const siteConfig = {
   brand: {
-    name: 'Digo Telecom',
+    name: company.name,
     /** Nombre corto de la marca en el header. */
-    shortName: 'Digo',
-    tagline: '¡Siempre contigo!',
+    shortName: company.shortName,
+    tagline: company.tagline,
     city: 'Arequipa, Perú',
-    website: 'digo.net.pe',
+    website: company.website,
+    legalName: company.legalName,
+    ruc: company.ruc,
+    logoUrl: company.logo ? imageUrl(company.logo.url, 128) : '/brand/digo-logo-128.png',
   },
-  // Dos números oficiales (septiembre de 2026): el fijo (cuenta de empresa de WhatsApp verificada,
-  // también para llamadas) y un celular que atiende WhatsApp y llamadas. Los botones de WhatsApp
-  // del sitio usan el fijo. `null` = dato pendiente: se oculta en producción.
   contact: {
-    phone: '+5117012341',
-    phoneDisplay: '(01) 701-2341',
-    mobile: '+51925521741',
-    mobileDisplay: '925 521 741',
-    email: 'team@digo.net.pe' as string | null,
-    address: 'Calle Ambrosio Vucetich 130, Parque Industrial, Arequipa' as string | null,
-    // Formato internacional (51 = Perú, 1 = fijo de Lima): sin código de país, wa.me no lo encuentra.
-    whatsappHogar: '5117012341',
-    whatsappEmpresas: '5117012341',
-    whatsappDisplay: '(01) 701-2341',
-    advisorName: 'Yudi C.',
+    phone: company.phone,
+    phoneDisplay: company.phoneDisplay,
+    mobile: company.mobile,
+    mobileDisplay: company.mobileDisplay,
+    email: company.email,
+    address: company.address,
+    // Formato internacional (51 = Perú): sin código de país, wa.me no lo encuentra.
+    whatsapp: company.whatsapp,
+    whatsappDisplay: company.whatsappDisplay,
+    advisorName: company.advisorName,
   },
   whatsappMessages: {
     hogar: 'Hola Digo Telecom, quiero consultar un plan de fibra óptica para mi hogar en Arequipa.',
-    empresas:
-      'Hola Digo Telecom, necesito una cotización de internet dedicado para mi empresa en Arequipa.',
     plan: (planName: string) =>
       `Hola Digo Telecom, me interesa el plan ${planName} para mi hogar en Arequipa.`,
-    cobertura: (address: string) =>
-      `Hola Digo Telecom, quiero consultar cobertura de fibra en: ${address}`,
-    contacto: (values: Record<string, string>) =>
-      [
-        'Hola Digo Telecom, les escribo desde la web.',
-        `Nombre: ${values.nombre}`,
-        `Teléfono: ${values.telefono}`,
-        values.email ? `Correo: ${values.email}` : null,
-        `Consulta: ${values.mensaje}`,
+    /** Consulta de cobertura desde el mapa; con ubicación, lleva dirección y coordenadas. */
+    cobertura: (location?: { address: string | null; lat: number; lng: number; zone?: string }) => {
+      if (!location) return 'Hola Digo Telecom, quiero consultar si tienen cobertura de fibra en mi dirección.'
+      const lat = location.lat.toFixed(6)
+      const lng = location.lng.toFixed(6)
+      return [
+        'Hola Digo Telecom, quiero consultar cobertura de fibra en mi ubicación.',
+        location.address ? `Dirección aproximada: ${location.address}` : null,
+        `Latitud: ${lat}`,
+        `Longitud: ${lng}`,
+        `Mapa: https://maps.google.com/?q=${lat},${lng}`,
+        location.zone ? `(Según la web estoy dentro de la zona ${location.zone}.)` : null,
       ]
         .filter(Boolean)
-        .join('\n'),
-    cotizacion: (values: Record<string, string>) =>
-      [
-        'Hola Digo Telecom, solicito una cotización corporativa.',
-        `Razón social: ${values.empresa}`,
-        `RUC: ${values.ruc}`,
-        `Contacto: ${values.contacto}`,
-        `Teléfono: ${values.telefono}`,
-        `Requerimientos: ${values.requerimientos}`,
-      ].join('\n'),
-    reclamo: (values: Record<string, string>) =>
-      [
-        `Hola Digo Telecom, registro un${values.tipoReclamo === 'queja' ? 'a queja' : ' reclamo'} en el Libro de Reclamaciones.`,
-        `Documento: ${values.tipoDocumento.toUpperCase()} ${values.numeroDocumento}`,
-        `Nombre o razón social: ${values.nombres}`,
-        `Domicilio: ${values.domicilio}`,
-        `Correo: ${values.email}`,
-        `Teléfono: ${values.telefono}`,
-        `Detalle: ${values.detalle}`,
-        `Pedido: ${values.pedido}`,
-      ].join('\n'),
+        .join('\n')
+    },
+    /** Desde el libro de reclamaciones: soporte técnico antes de registrar una hoja. */
+    soporte: 'Hola Digo Telecom, necesito soporte técnico: tengo una falla en mi servicio.',
+    /** Tras dejar una consulta en el formulario, para seguir la conversación por WhatsApp. */
+    seguimiento: (name: string) =>
+      `Hola Digo Telecom, soy ${name}. Acabo de dejarles una consulta en la web.`,
   },
   osiptelNotice:
     'En cumplimiento de la Ley N° 31207 y la Resolución de Consejo Directivo N° 00138-2021-CD/OSIPTEL, Digo Telecom garantiza el 70% de la velocidad contratada (mínimo garantizado) tanto en subida como en bajada.',
-  // `#ancla` = sección de la página del segmento; `/ruta` = vista aparte.
-  navHogar: [
+  // `#ancla` = sección de la página de inicio; `/ruta` = vista aparte. "Medios de pago" va en el
+  // menú principal: es de lo que más preguntan los clientes.
+  nav: [
     { href: '#inicio', label: 'Inicio' },
     { href: '#planes', label: 'Planes' },
-    { href: '#servicios', label: 'Servicios' },
     { href: '/cobertura', label: 'Cobertura' },
     { href: '/medios-de-pago', label: 'Medios de pago' },
     { href: '/preguntas-frecuentes', label: 'Preguntas' },
     { href: '/nosotros', label: 'Nosotros' },
     { href: '#contacto', label: 'Contacto' },
   ] satisfies NavLink[],
-  navEmpresas: [
-    { href: '#empresas-inicio', label: 'Inicio' },
-    { href: '#beneficios-empresas', label: 'Beneficios' },
-    { href: '#servicios-empresas', label: 'Servicios' },
-    { href: '#proceso-empresas', label: 'Proceso' },
-    { href: '#cobertura-empresas', label: 'Cobertura' },
-    { href: '#contacto-empresas', label: 'Contacto' },
-  ] satisfies NavLink[],
-  social: [
-    {
-      id: 'facebook',
-      label: 'Facebook',
-      href: 'https://www.facebook.com/people/Digo-Telecom/61593841747060/',
-    },
-    { id: 'instagram', label: 'Instagram', href: null },
-    { id: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@digoarequipa' },
-    { id: 'youtube', label: 'YouTube', href: null },
-  ] as SocialLink[],
+  social: siteContent.social.map(
+    (link): SocialLink => ({
+      id: link.id,
+      network: link.network,
+      label: link.label,
+      href: link.url,
+      iconUrl: link.icon ? imageUrl(link.icon.url, 64) : null,
+    }),
+  ),
   pages: [
     { href: '/cobertura', label: 'Cobertura' },
     { href: '/medios-de-pago', label: 'Medios de pago' },
@@ -124,45 +111,49 @@ export const siteConfig = {
     { href: '/libro-de-reclamaciones', label: 'Libro de reclamaciones' },
     { href: '/terminos-y-condiciones', label: 'Términos y condiciones' },
   ],
-} as const
+}
 
 export function buildWhatsAppUrl(phone: string, message: string): string {
   const digits = phone.replace(/\D/g, '')
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`
 }
 
-export function getWhatsAppHref(segment: Segment, message?: string): string {
-  const phone =
-    segment === 'empresas'
-      ? (siteConfig.contact.whatsappEmpresas ??
-        siteConfig.contact.whatsappHogar ??
-        siteConfig.contact.whatsappDisplay)
-      : (siteConfig.contact.whatsappHogar ?? siteConfig.contact.whatsappDisplay)
-
-  const defaultMessage =
-    segment === 'empresas'
-      ? siteConfig.whatsappMessages.empresas
-      : siteConfig.whatsappMessages.hogar
-
-  return buildWhatsAppUrl(phone, message ?? defaultMessage)
+export function getWhatsAppHref(message?: string): string {
+  return buildWhatsAppUrl(siteConfig.contact.whatsapp, message ?? siteConfig.whatsappMessages.hogar)
 }
 
-/** Enlaces del celular oficial (llamada y WhatsApp). */
-export function getMobilePhoneHref(): string {
-  return `tel:${siteConfig.contact.mobile}`
+/** Enlaces del celular oficial (llamada y WhatsApp); null si no hay celular configurado. */
+export function getMobilePhoneHref(): string | null {
+  return siteConfig.contact.mobile ? `tel:${siteConfig.contact.mobile}` : null
 }
 
-export function getMobileWhatsAppHref(message?: string): string {
-  return buildWhatsAppUrl(siteConfig.contact.mobile, message ?? siteConfig.whatsappMessages.hogar)
+export function getMobileWhatsAppHref(message?: string): string | null {
+  const { mobile } = siteConfig.contact
+  return mobile ? buildWhatsAppUrl(mobile, message ?? siteConfig.whatsappMessages.hogar) : null
+}
+
+/** Uno de los números oficiales: los dos sirven para llamar y para WhatsApp. */
+export type OfficialNumber = { id: 'fijo' | 'celular'; label: string; display: string; tel: string; whatsapp: string }
+
+/** Los dos números oficiales de Digo (fijo y celular), cada uno con llamada y WhatsApp. */
+export function officialNumbers(message?: string): OfficialNumber[] {
+  const { phone, phoneDisplay, mobile, mobileDisplay } = siteConfig.contact
+  const text = message ?? siteConfig.whatsappMessages.hogar
+  const numbers: OfficialNumber[] = [
+    {
+      id: 'fijo',
+      label: 'Teléfono fijo',
+      display: phoneDisplay,
+      tel: `tel:${phone.replace(/\s/g, '')}`,
+      whatsapp: buildWhatsAppUrl(phone, text),
+    },
+  ]
+  if (mobile && mobileDisplay) {
+    numbers.push({ id: 'celular', label: 'Celular', display: mobileDisplay, tel: `tel:${mobile}`, whatsapp: buildWhatsAppUrl(mobile, text) })
+  }
+  return numbers
 }
 
 export function getPhoneHref(): string {
-  if (siteConfig.contact.phone) {
-    return `tel:${siteConfig.contact.phone.replace(/\s/g, '')}`
-  }
-  return `tel:${siteConfig.contact.phoneDisplay.replace(/\s/g, '')}`
-}
-
-export function getPublishedSocialLinks(): SocialLink[] {
-  return siteConfig.social.filter((social) => social.href !== null || showPlaceholders)
+  return `tel:${siteConfig.contact.phone.replace(/\s/g, '')}`
 }

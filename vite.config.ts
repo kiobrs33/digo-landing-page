@@ -13,4 +13,10 @@ export default defineConfig({
       '@': path.resolve(rootDir, './src'),
     },
   },
+  server: {
+    port: 4111,
+    strictPort: true,
+    // En local los formularios llaman a /api del mismo origen: Vite lo reenvía al backend.
+    proxy: { '/api': process.env.CONTENT_API_URL ?? 'http://localhost:4110' },
+  },
 })
