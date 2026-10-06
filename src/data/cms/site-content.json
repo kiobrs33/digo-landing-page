@@ -17,7 +17,7 @@
     "advisorName": "Yudi C.",
     "website": "digo.net.pe",
     "logo": {
-      "url": "http://localhost:4110/uploads/seed-digo-logo-256.png",
+      "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298289/digo-telecom/hogar/seed-digo-logo-256.png",
       "width": 256,
       "height": 256,
       "alt": "Logo de Digo Telecom"
@@ -103,7 +103,7 @@
       "startsAt": null,
       "endsAt": null,
       "image": {
-        "url": "http://localhost:4110/uploads/seed-digo-promo-1.jpg",
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298292/digo-telecom/hogar/seed-digo-promo-1.jpg",
         "width": 1300,
         "height": 1300,
         "alt": "Nuevo plan de 1000 megas por S/ 44.50 con streaming incluido"
@@ -119,7 +119,7 @@
       "startsAt": null,
       "endsAt": null,
       "image": {
-        "url": "http://localhost:4110/uploads/seed-digo-promo-5.jpg",
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298292/digo-telecom/hogar/seed-digo-promo-5.jpg",
         "width": 1080,
         "height": 1350,
         "alt": "Zonas de cobertura, parte 2: ahora estamos más cerca de ti. Contáctanos al (01) 701-2341"
@@ -135,7 +135,7 @@
       "startsAt": null,
       "endsAt": null,
       "image": {
-        "url": "http://localhost:4110/uploads/seed-digo-yape-servicios.jpg",
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298291/digo-telecom/hogar/seed-digo-yape-servicios.jpg",
         "width": 1254,
         "height": 1254,
         "alt": "Paga tu recibo Digo en Yape en 5 pasos: entra a Yape, busca DIGO, ingresa tu DNI o RUC, selecciona tu recibo y listo. No es necesario enviar comprobante."
@@ -164,7 +164,7 @@
       "category": "PROYECTOS",
       "caption": "Fusión de fibra óptica: así llevamos la conexión hasta más hogares.",
       "image": {
-        "url": "http://localhost:4110/uploads/seed-fusion-fibra.webp",
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298294/digo-telecom/hogar/seed-fusion-fibra.webp",
         "width": 820,
         "height": 670,
         "alt": "Dos técnicos con casco y chaleco naranja fusionan fibra óptica con una empalmadora"
@@ -175,7 +175,7 @@
       "category": "ACTIVIDADES",
       "caption": "Nuestro stand en Arequipa: atención personalizada, cara a cara.",
       "image": {
-        "url": "http://localhost:4110/uploads/seed-stand-arequipa.webp",
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298294/digo-telecom/hogar/seed-stand-arequipa.webp",
         "width": 850,
         "height": 870,
         "alt": "Stand de Digo Telecom con banderas y banners, un asesor atiende a dos vecinos"
@@ -186,10 +186,32 @@
       "category": "PROYECTOS",
       "caption": "Ampliamos la red de fibra óptica en las calles de Arequipa.",
       "image": {
-        "url": "http://localhost:4110/uploads/seed-tendido-poste.webp",
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791298293/digo-telecom/hogar/seed-tendido-poste.webp",
         "width": 700,
         "height": 1035,
         "alt": "Técnico de Digo sobre una escalera trabajando en la caja de fibra de un poste; abajo, otro técnico junto a la camioneta de Digo"
+      }
+    },
+    {
+      "id": "5d6c2a6e-2a4d-488e-b377-412e3b5b1bfd",
+      "category": "PROYECTOS",
+      "caption": "Lo mejor",
+      "image": {
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791296500/digo-telecom/hogar/t5cf1m0ba3ndzsx0qizn.jpg",
+        "width": 1254,
+        "height": 1254,
+        "alt": "Promocion hallowen"
+      }
+    },
+    {
+      "id": "9eb7d3a5-49a6-413f-999b-40a80e083e35",
+      "category": "PROYECTOS",
+      "caption": "El leon",
+      "image": {
+        "url": "https://res.cloudinary.com/dks25ivcf/image/upload/v1791296701/digo-telecom/hogar/xul3wlkpwqvw9lpbajqy.png",
+        "width": 512,
+        "height": 512,
+        "alt": "El mejor leon"
       }
     }
   ],
